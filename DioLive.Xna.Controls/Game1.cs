@@ -28,6 +28,7 @@ namespace DioLive.Xna.Controls
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            this.IsMouseVisible = true;
 
             base.Initialize();
         }
@@ -67,14 +68,14 @@ namespace DioLive.Xna.Controls
             {
                 Location = new Vector2(350, 180),
                 Size = new Vector2(200, 200),
-                Background = Color.LightBlue,
+                Background = Color.Yellow,
             };
             this.c1.Items.Add(c4);
             var c5 = new Container
             {
                 Location = new Vector2(370, 190),
                 Size = new Vector2(200, 200),
-                Background = Color.Red,
+                Background = Color.Purple,
             };
             c4.Items.Add(c5);
             this.c1.Items.Add(c4);

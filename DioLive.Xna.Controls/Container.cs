@@ -10,6 +10,7 @@ namespace DioLive.Xna.Controls
         public Container()
         {
             this.Items = new List<UIElement>();
+            this.Border = new Border { Color = Color.Black, Width = 2 };
         }
 
         public IList<UIElement> Items { get; }
@@ -25,33 +26,21 @@ namespace DioLive.Xna.Controls
             }
         }
 
-        public override void Draw(SpriteBatch sb)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            base.Draw(sb);
+            base.Draw(spriteBatch);
+            var gfx = spriteBatch.GraphicsDevice;
 
-            var spriteBatch = new SpriteBatch(sb.GraphicsDevice);
-            //spriteBatch.End();
-
-            RasterizerState currentRasterizerState = spriteBatch.GraphicsDevice.RasterizerState;
-            Rectangle currentRect = spriteBatch.GraphicsDevice.ScissorRectangle;
-
-
-            spriteBatch.Begin(SpriteSortMode.Immediate);
-
-            spriteBatch.GraphicsDevice.RasterizerState = Assets.Scissors;
-            spriteBatch.GraphicsDevice.ScissorRectangle = Rectangle.Intersect(this.Bounds, currentRect);
-
-            foreach (var element in this.GetOrderedElements())
+            using (Scope.UseValue(() => gfx.RasterizerState, Assets.Scissors))
             {
-                element.Draw(spriteBatch);
+                using (Scope.UseValue(() => gfx.ScissorRectangle, Rectangle.Intersect(this.InnerBounds, gfx.ScissorRectangle)))
+                {
+                    foreach (var element in this.GetOrderedElements())
+                    {
+                        element.Draw(spriteBatch);
+                    }
+                }
             }
-
-            spriteBatch.End();
-
-            spriteBatch.GraphicsDevice.ScissorRectangle = currentRect;
-            spriteBatch.GraphicsDevice.RasterizerState = currentRasterizerState;
-
-            //spriteBatch.Begin();
         }
     }
 }
