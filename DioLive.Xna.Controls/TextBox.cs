@@ -3,6 +3,7 @@
 	using Microsoft.Xna.Framework;
 	using Microsoft.Xna.Framework.Graphics;
 	using Microsoft.Xna.Framework.Input;
+	using System;
 
 	public class TextBox : UIElement
 	{
@@ -29,13 +30,14 @@
 
 		public SpriteFont Font { get; set; }
 
+		public int PaddingX { get; set; }
+
+		public int PaddingY { get; set; }
+
 		/// <summary>
 		/// Text inside the element
 		/// </summary>
 		public string Text { get; set; } // TODO
-
-		public int PaddingX { get; set; }
-		public int PaddingY { get; set; }
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
@@ -55,52 +57,6 @@
 			return this.Text;
 		}
 
-		private readonly Keys[] keys = new Keys[]
-		{
-			Keys.Q,
-			Keys.W,
-			Keys.E,
-			Keys.R,
-			Keys.T,
-			Keys.Y,
-			Keys.U,
-			Keys.I,
-			Keys.O,
-			Keys.P,
-			Keys.A,
-			Keys.S,
-			Keys.D,
-			Keys.F,
-			Keys.G,
-			Keys.H,
-			Keys.J,
-			Keys.K,
-			Keys.L,
-			Keys.Z,
-			Keys.X,
-			Keys.C,
-			Keys.V,
-			Keys.B,
-			Keys.N,
-			Keys.M,
-			Keys.Back,
-			Keys.Space,
-
-			// arabic numbers
-			Keys.D0,
-			Keys.D1,
-			Keys.D2,
-			Keys.D3,
-			Keys.D4,
-			Keys.D5,
-			Keys.D6,
-			Keys.D7,
-			Keys.D8,
-			Keys.D9,
-		};
-
-		private KeyboardState previousKeyboardState;
-
 		public override void Update(GameTime gameTime)
 		{
 			base.Update(gameTime);
@@ -109,7 +65,7 @@
 			{
 				KeyboardState state = Keyboard.GetState();
 
-				foreach (var key in keys)
+				foreach (Keys key in Enum.GetValues(typeof(Keys)))
 				{
 					if (state.IsKeyUp(key) && (this.previousKeyboardState.IsKeyDown(key)))
 					{
@@ -120,6 +76,67 @@
 				this.previousKeyboardState = state;
 			}
 		}
+
+		private readonly Keys[] keys = new Keys[]
+						{
+							Keys.Q,
+							Keys.W,
+							Keys.E,
+							Keys.R,
+							Keys.T,
+							Keys.Y,
+							Keys.U,
+							Keys.I,
+							Keys.O,
+							Keys.P,
+							Keys.A,
+							Keys.S,
+							Keys.D,
+							Keys.F,
+							Keys.G,
+							Keys.H,
+							Keys.J,
+							Keys.K,
+							Keys.L,
+							Keys.Z,
+							Keys.X,
+							Keys.C,
+							Keys.V,
+							Keys.B,
+							Keys.N,
+							Keys.M,
+
+							////////////////////////// controls
+							Keys.Back,		// backspace
+							Keys.Space,		// space
+							Keys.OemQuestion,	// ?
+							Keys.OemPeriod,		// .
+							Keys.OemComma,		// ,
+							Keys.OemSemicolon,	// ;
+							Keys.OemQuotes,		// '
+							Keys.OemPipe,		// \
+							Keys.OemOpenBrackets,	// [
+							Keys.OemCloseBrackets,	// ]
+							Keys.OemMinus,		// -
+							Keys.OemPlus,		// =
+							Keys.OemTilde,		// `
+							//////////////////////////
+
+							/////////// arabic numbers
+							Keys.D0, //
+							Keys.D1, //
+							Keys.D2, //
+							Keys.D3, //
+							Keys.D4, //
+							Keys.D5, //
+							Keys.D6, //
+							Keys.D7, //
+							Keys.D8, //
+							Keys.D9, //
+							///////////
+						};
+
+		private KeyboardState previousKeyboardState;
 
 		private string Map(Keys key, string text, bool isShift)
 		{
@@ -132,10 +149,10 @@
 
 			if (isShift)
 			{
+				#region isShift
+
 				switch (key)
 				{
-					#region isShift
-
 					case Keys.Back:
 						{
 							if (output.Length > 1)
@@ -147,6 +164,72 @@
 					case Keys.Space:
 						{
 							output += " ";
+							break;
+						}
+
+					case Keys.OemQuestion:          // ?
+						{
+							output += "?";
+							break;
+						}
+
+					case Keys.OemPeriod:            // .
+						{
+							output += ">";
+							break;
+						}
+
+					case Keys.OemComma:             // ,
+						{
+							output += "<";
+							break;
+						}
+
+					case Keys.OemSemicolon:         // ;
+						{
+							output += ":";
+							break;
+						}
+
+					case Keys.OemQuotes:            // '
+						{
+							output += "\"";
+							break;
+						}
+
+					case Keys.OemPipe:              // \
+						{
+							output += "|";
+							break;
+						}
+
+					case Keys.OemOpenBrackets:      // [
+						{
+							output += "{";
+							break;
+						}
+
+					case Keys.OemCloseBrackets:     // ]
+						{
+							output += "}";
+							break;
+						}
+
+					case Keys.OemMinus:             // -
+						{
+							output += "_";
+							break;
+						}
+
+					case Keys.OemPlus:              // =
+						{
+							output += "+";
+							break;
+						}
+
+					case Keys.OemTilde:             // `
+						{
+							output += "~";
 							break;
 						}
 
@@ -337,6 +420,71 @@
 					case Keys.Space:
 						{
 							output += " ";
+							break;
+						}
+					case Keys.OemQuestion:          // ?
+						{
+							output += "/";
+							break;
+						}
+
+					case Keys.OemPeriod:            // .
+						{
+							output += ".";
+							break;
+						}
+
+					case Keys.OemComma:             // ,
+						{
+							output += ",";
+							break;
+						}
+
+					case Keys.OemSemicolon:         // ;
+						{
+							output += ";";
+							break;
+						}
+
+					case Keys.OemQuotes:            // '
+						{
+							output += "'";
+							break;
+						}
+
+					case Keys.OemPipe:              // \
+						{
+							output += "\\";
+							break;
+						}
+
+					case Keys.OemOpenBrackets:      // [
+						{
+							output += "[";
+							break;
+						}
+
+					case Keys.OemCloseBrackets:     // ]
+						{
+							output += "]";
+							break;
+						}
+
+					case Keys.OemMinus:             // -
+						{
+							output += "-";
+							break;
+						}
+
+					case Keys.OemPlus:              // =
+						{
+							output += "=";
+							break;
+						}
+
+					case Keys.OemTilde:             // `
+						{
+							output += "`";
 							break;
 						}
 
