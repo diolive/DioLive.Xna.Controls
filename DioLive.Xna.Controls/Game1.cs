@@ -92,6 +92,8 @@
 
 			// TODO: Add your update logic here
 
+			c1.Update(gameTime);
+
 			base.Update(gameTime);
 		}
 
