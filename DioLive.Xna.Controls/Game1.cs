@@ -64,7 +64,7 @@
 						Color.Purple);
 			c4.Items.Add(c5);
 			this.c1.Items.Add(c4);
-			var c6 = new TextBox("Hello, world!",
+			var c6 = new TextBox(":",
 						new Vector2(50, 60),
 						new Vector2(150, 40),
 						Color.Aqua);

@@ -2,7 +2,8 @@
 {
 	using Microsoft.Xna.Framework;
 	using Microsoft.Xna.Framework.Graphics;
-	using System.Diagnostics;
+	using Microsoft.Xna.Framework.Input;
+
 	public class TextBox : UIElement
 	{
 		public TextBox(string text, Vector2 location, Vector2 size, Background background, Border border = null) : base(location, size, background, border)
@@ -31,7 +32,7 @@
 		/// <summary>
 		/// Text inside the element
 		/// </summary>
-		public string Text { get; set; }
+		public string Text { get; set; } // TODO
 
 		public int PaddingX { get; set; }
 		public int PaddingY { get; set; }
@@ -54,17 +55,63 @@
 			return this.Text;
 		}
 
+		private readonly Keys[] keys = new Keys[]
+		{
+			Keys.Q,
+			Keys.W,
+			Keys.E,
+			Keys.R,
+			Keys.T,
+			Keys.Y,
+			Keys.U,
+			Keys.I,
+			Keys.O,
+			Keys.P,
+			Keys.A,
+			Keys.S,
+			Keys.D,
+			Keys.F,
+			Keys.G,
+			Keys.H,
+			Keys.J,
+			Keys.K,
+			Keys.L,
+			Keys.Z,
+			Keys.X,
+			Keys.C,
+			Keys.V,
+			Keys.B,
+			Keys.N,
+			Keys.M,
+			Keys.Back,
+			Keys.Space,
+		};
+
 		public override void Update(GameTime gameTime)
 		{
 			base.Update(gameTime);
 
 			if (this.IsFocused)
 			{
-				Debug.WriteLine("true");
-			}
-			else
-			{
-				Debug.WriteLine("false");
+				KeyboardState state = Keyboard.GetState();
+
+				foreach (var key in keys)
+				{
+					if (state.IsKeyDown(key))
+					{
+						if (key == Keys.Back)
+						{
+							if (this.Text.Length > 1)
+							{
+								this.Text = this.Text.Remove(this.Text.Length - 1, 1);
+							}
+						}
+						else
+						{
+							this.Text += key;
+						}
+					}
+				}
 			}
 		}
 	}
