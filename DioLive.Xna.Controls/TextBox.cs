@@ -19,20 +19,26 @@
 
 			Vector2 fontSize = Font.MeasureString(this.Text);
 
-			this.PaddingX = (this.X - fontSize.X < 0 ?
-						5 :
-						((int)(this.X - fontSize.X) / 2));
+			Vector2 padding = new Vector2
+			{
 
-			this.PaddingY = (this.Y - fontSize.Y < 0 ?
-						0 :
-						((int)(this.Y - fontSize.Y) / 4)); // why 4? #diefrontenddie
+				X = ((this.X - fontSize.X < 0) ?
+						(5) : // 5 is default
+						((this.X - fontSize.X) / 2)
+						),
+
+				Y = ((this.Y - fontSize.Y < 0) ?
+						(0) :
+						((this.Y - fontSize.Y) / 4)
+						) // why 4? #diefrontenddie
+			};
+
+			this.Padding = padding;
 		}
 
 		public SpriteFont Font { get; set; }
 
-		public int PaddingX { get; set; }
-
-		public int PaddingY { get; set; }
+		public Vector2 Padding { get; set; }
 
 		/// <summary>
 		/// Text inside the element
@@ -45,8 +51,8 @@
 
 			Vector2 fontPosition = new Vector2
 			{
-				X = this.Location.X + this.PaddingX,
-				Y = this.Location.Y + this.PaddingY
+				X = this.Location.X + this.Padding.X,
+				Y = this.Location.Y + this.Padding.Y
 			};
 
 			spriteBatch.DrawString(Font, this.Text, fontPosition, Color.Black);
@@ -77,7 +83,9 @@
 			}
 		}
 
-
+		/// <summary>
+		/// Using in Textbox Update() method
+		/// </summary>
 		private KeyboardState previousKeyboardState;
 
 		#region indiaismymother
