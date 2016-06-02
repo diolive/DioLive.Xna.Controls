@@ -2,7 +2,7 @@
 {
 	using Microsoft.Xna.Framework;
 	using Microsoft.Xna.Framework.Graphics;
-
+	using System.Diagnostics;
 	public class TextBox : UIElement
 	{
 		public TextBox(string text, Vector2 location, Vector2 size, Background background, Border border = null) : base(location, size, background, border)
@@ -23,9 +23,7 @@
 
 			this.PaddingY = (this.Y - fontSize.Y < 0 ?
 						0 :
-						((int)(this.Y - fontSize.Y) / 2));
-
-			this.PaddingY /= 2;
+						((int)(this.Y - fontSize.Y) / 4)); // why 4? #diefrontenddie
 		}
 
 		public SpriteFont Font { get; set; }
@@ -42,10 +40,11 @@
 		{
 			base.Draw(spriteBatch);
 
-			Vector2 fontPosition = new Vector2();
-
-			fontPosition.X = this.Location.X + this.PaddingX;
-			fontPosition.Y = this.Location.Y + this.PaddingY;
+			Vector2 fontPosition = new Vector2
+			{
+				X = this.Location.X + this.PaddingX,
+				Y = this.Location.Y + this.PaddingY
+			};
 
 			spriteBatch.DrawString(Font, this.Text, fontPosition, Color.Black);
 		}
@@ -61,6 +60,11 @@
 
 			if (this.IsFocused)
 			{
+				Debug.WriteLine("true");
+			}
+			else
+			{
+				Debug.WriteLine("false");
 			}
 		}
 	}
