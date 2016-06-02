@@ -1,5 +1,6 @@
 ﻿namespace DioLive.Xna.Controls
 {
+	using System;
 	using Microsoft.Xna.Framework;
 	using Microsoft.Xna.Framework.Graphics;
 	using Microsoft.Xna.Framework.Input;
@@ -85,7 +86,18 @@
 			Keys.M,
 			Keys.Back,
 			Keys.Space,
-			Keys.Separator
+
+			// arabic numbers
+			Keys.D0,
+			Keys.D1,
+			Keys.D2,
+			Keys.D3,
+			Keys.D4,
+			Keys.D5,
+			Keys.D6,
+			Keys.D7,
+			Keys.D8,
+			Keys.D9,
 		};
 		private KeyboardState previousKeyboardState;
 
@@ -101,26 +113,97 @@
 				{
 					if (state.IsKeyUp(key) && (this.previousKeyboardState.IsKeyDown(key)))
 					{
-						if (key == Keys.Back)
-						{
-							if (this.Text.Length > 1)
-							{
-								this.Text = this.Text.Remove(this.Text.Length - 1, 1);
-							}
-							continue;
-						}
-						if (key == Keys.Space)
-						{
-							this.Text += " ";
-							continue;
-						}
+						this.Text = Map(key, this.Text);
 
-						this.Text += key;
 					}
 				}
 
 				this.previousKeyboardState = state;
 			}
+		}
+
+		private string Map(Keys key, string text)
+		{
+			if (text == null)
+			{
+				return null;
+			}
+
+			string output = text.Clone() as string;
+
+			switch (key)
+			{
+				case Keys.Back:
+					{
+						if (output.Length > 1)
+						{
+							output = output.Remove(output.Length - 1, 1);
+						}
+						break;
+					}
+				case Keys.Space:
+					{
+						output += " ";
+						break;
+					}
+
+				case Keys.D0:
+					{
+						output += "0";
+						break;
+					}
+				case Keys.D1:
+					{
+						output += "1";
+						break;
+					}
+				case Keys.D2:
+					{
+						output += "2";
+						break;
+					}
+				case Keys.D3:
+					{
+						output += "3";
+						break;
+					}
+				case Keys.D4:
+					{
+						output += "4";
+						break;
+					}
+				case Keys.D5:
+					{
+						output += "5";
+						break;
+					}
+				case Keys.D6:
+					{
+						output += "6";
+						break;
+					}
+				case Keys.D7:
+					{
+						output += "7";
+						break;
+					}
+				case Keys.D8:
+					{
+						output += "8";
+						break;
+					}
+				case Keys.D9:
+					{
+						output += "9";
+						break;
+					}
+				default:
+					output += key;
+					break;
+			}
+
+			return output;
+
 		}
 	}
 }
