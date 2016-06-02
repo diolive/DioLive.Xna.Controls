@@ -16,6 +16,29 @@
 
 	public abstract class UIElement
 	{
+		#region ctors
+
+		protected UIElement(Vector2 location, Vector2 size, Background background, Border border = null)
+		{
+			this.Textures = new Dictionary<VisibleState, Texture2D>();
+
+			this.Location = location;
+			this.Size = size;
+			this.Background = background;
+
+			if (border == null)
+			{
+				border = new Border(Color.Black, 2);
+			}
+
+			this.Border = border;
+
+			this.MouseClick += (s, e) => { this.IsFocused = true; };
+			this.MouseUnclick += (s, e) => { this.IsFocused = false; };
+		}
+
+		#endregion ctors
+
 		public Background Background { get; set; }
 		public Border Border { get; set; }
 
@@ -154,10 +177,15 @@
 			else
 			{
 				//if (this.previousVisibleState == VisibleState.Hover ||
+				//	this.previousVisibleState == VisibleState.Pressed)
+				//{
+				//	this.OnMouseOut(EventArgs.Empty);
+				//}
 
-				if (this.previousVisibleState == VisibleState.Pressed)
+				if (this.currentMouseState.LeftButton == ButtonState.Pressed)
 				{
-					this.OnMouseOut(EventArgs.Empty);
+					this.OnMouseUnclick(EventArgs.Empty);
+
 				}
 
 				this.currentVisibleState = VisibleState.Normal;
@@ -174,25 +202,6 @@
 		protected VisibleState currentVisibleState = VisibleState.Normal;
 		protected MouseState previousMouseState;
 		protected VisibleState previousVisibleState = VisibleState.Normal;
-
-		protected UIElement(Vector2 location, Vector2 size, Background background, Border border = null)
-		{
-			this.Textures = new Dictionary<VisibleState, Texture2D>();
-
-			this.Location = location;
-			this.Size = size;
-			this.Background = background;
-
-			if (border == null)
-			{
-				border = new Border(Color.Black, 2);
-			}
-
-			this.Border = border;
-
-			this.MouseClick += (s, e) => { this.IsFocused = true; };
-			this.MouseOut += (s, e) => { this.IsFocused = false; };
-		}
 
 		private Vector2 location;
 		private Vector2 size;
@@ -213,6 +222,8 @@
 
 		public event EventHandler MouseClick;
 
+		public event EventHandler MouseUnclick;
+
 		public event EventHandler MouseDown;
 
 		public event EventHandler MouseOut;
@@ -222,6 +233,11 @@
 		public void OnMouseClick(EventArgs e)
 		{
 			this.MouseClick?.Invoke(this, e);
+		}
+
+		public void OnMouseUnclick(EventArgs e)
+		{
+			this.MouseUnclick?.Invoke(this, e);
 		}
 
 		public void OnMouseDown(EventArgs e)
