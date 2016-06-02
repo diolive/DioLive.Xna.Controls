@@ -1,6 +1,5 @@
 ﻿namespace DioLive.Xna.Controls
 {
-	using System;
 	using Microsoft.Xna.Framework;
 	using Microsoft.Xna.Framework.Graphics;
 	using Microsoft.Xna.Framework.Input;
@@ -99,6 +98,7 @@
 			Keys.D8,
 			Keys.D9,
 		};
+
 		private KeyboardState previousKeyboardState;
 
 		public override void Update(GameTime gameTime)
@@ -113,8 +113,7 @@
 				{
 					if (state.IsKeyUp(key) && (this.previousKeyboardState.IsKeyDown(key)))
 					{
-						this.Text = Map(key, this.Text);
-
+						this.Text = Map(key, this.Text, state.IsKeyDown(Keys.LeftShift) || state.IsKeyDown(Keys.RightShift));
 					}
 				}
 
@@ -122,7 +121,7 @@
 			}
 		}
 
-		private string Map(Keys key, string text)
+		private string Map(Keys key, string text, bool isShift)
 		{
 			if (text == null)
 			{
@@ -131,79 +130,388 @@
 
 			string output = text.Clone() as string;
 
-			switch (key)
+			if (isShift)
 			{
-				case Keys.Back:
-					{
-						if (output.Length > 1)
-						{
-							output = output.Remove(output.Length - 1, 1);
-						}
-						break;
-					}
-				case Keys.Space:
-					{
-						output += " ";
-						break;
-					}
+				switch (key)
+				{
+					#region isShift
 
-				case Keys.D0:
-					{
-						output += "0";
+					case Keys.Back:
+						{
+							if (output.Length > 1)
+							{
+								output = output.Remove(output.Length - 1, 1);
+							}
+							break;
+						}
+					case Keys.Space:
+						{
+							output += " ";
+							break;
+						}
+
+					#region numbers
+
+					case Keys.D0:
+						{
+							output += ")";
+							break;
+						}
+					case Keys.D1:
+						{
+							output += "!";
+							break;
+						}
+					case Keys.D2:
+						{
+							output += "@";
+							break;
+						}
+					case Keys.D3:
+						{
+							output += "#";
+							break;
+						}
+					case Keys.D4:
+						{
+							output += "$";
+							break;
+						}
+					case Keys.D5:
+						{
+							output += "%";
+							break;
+						}
+					case Keys.D6:
+						{
+							output += "^";
+							break;
+						}
+					case Keys.D7:
+						{
+							output += "&";
+							break;
+						}
+					case Keys.D8:
+						{
+							output += "*";
+							break;
+						}
+					case Keys.D9:
+						{
+							output += "(";
+							break;
+						}
+
+					#endregion numbers
+
+					#region letters
+
+					case Keys.Q:
+						output += "Q";
 						break;
-					}
-				case Keys.D1:
-					{
-						output += "1";
+
+					case Keys.W:
+						output += "W";
 						break;
-					}
-				case Keys.D2:
-					{
-						output += "2";
+
+					case Keys.E:
+						output += "E";
 						break;
-					}
-				case Keys.D3:
-					{
-						output += "3";
+
+					case Keys.R:
+						output += "R";
 						break;
-					}
-				case Keys.D4:
-					{
-						output += "4";
+
+					case Keys.T:
+						output += "T";
 						break;
-					}
-				case Keys.D5:
-					{
-						output += "5";
+
+					case Keys.Y:
+						output += "Y";
 						break;
-					}
-				case Keys.D6:
-					{
-						output += "6";
+
+					case Keys.U:
+						output += "U";
 						break;
-					}
-				case Keys.D7:
-					{
-						output += "7";
+
+					case Keys.I:
+						output += "I";
 						break;
-					}
-				case Keys.D8:
-					{
-						output += "8";
+
+					case Keys.O:
+						output += "O";
 						break;
-					}
-				case Keys.D9:
-					{
-						output += "9";
+
+					case Keys.P:
+						output += "P";
 						break;
-					}
-				default:
-					output += key;
-					break;
+
+					case Keys.A:
+						output += "A";
+						break;
+
+					case Keys.S:
+						output += "S";
+						break;
+
+					case Keys.D:
+						output += "D";
+						break;
+
+					case Keys.F:
+						output += "F";
+						break;
+
+					case Keys.G:
+						output += "G";
+						break;
+
+					case Keys.H:
+						output += "H";
+						break;
+
+					case Keys.J:
+						output += "J";
+						break;
+
+					case Keys.K:
+						output += "K";
+						break;
+
+					case Keys.L:
+						output += "L";
+						break;
+
+					case Keys.Z:
+						output += "Z";
+						break;
+
+					case Keys.X:
+						output += "X";
+						break;
+
+					case Keys.C:
+						output += "C";
+						break;
+
+					case Keys.V:
+						output += "V";
+						break;
+
+					case Keys.B:
+						output += "B";
+						break;
+
+					case Keys.N:
+						output += "N";
+						break;
+
+					case Keys.M:
+						output += "M";
+						break;
+
+					#endregion letters
+
+					default:
+						output += key;
+						break;
+				}
+
+				#endregion isShift
+			}
+			else
+			{
+				#region notShift
+
+				switch (key)
+				{
+					case Keys.Back:
+						{
+							if (output.Length > 1)
+							{
+								output = output.Remove(output.Length - 1, 1);
+							}
+							break;
+						}
+					case Keys.Space:
+						{
+							output += " ";
+							break;
+						}
+
+					#region numbers
+
+					case Keys.D0:
+						{
+							output += "0";
+							break;
+						}
+					case Keys.D1:
+						{
+							output += "1";
+							break;
+						}
+					case Keys.D2:
+						{
+							output += "2";
+							break;
+						}
+					case Keys.D3:
+						{
+							output += "3";
+							break;
+						}
+					case Keys.D4:
+						{
+							output += "4";
+							break;
+						}
+					case Keys.D5:
+						{
+							output += "5";
+							break;
+						}
+					case Keys.D6:
+						{
+							output += "6";
+							break;
+						}
+					case Keys.D7:
+						{
+							output += "7";
+							break;
+						}
+					case Keys.D8:
+						{
+							output += "8";
+							break;
+						}
+					case Keys.D9:
+						{
+							output += "9";
+							break;
+						}
+
+					#endregion numbers
+
+					#region letters
+
+					case Keys.Q:
+						output += "q";
+						break;
+
+					case Keys.W:
+						output += "w";
+						break;
+
+					case Keys.E:
+						output += "e";
+						break;
+
+					case Keys.R:
+						output += "r";
+						break;
+
+					case Keys.T:
+						output += "t";
+						break;
+
+					case Keys.Y:
+						output += "y";
+						break;
+
+					case Keys.U:
+						output += "u";
+						break;
+
+					case Keys.I:
+						output += "i";
+						break;
+
+					case Keys.O:
+						output += "o";
+						break;
+
+					case Keys.P:
+						output += "p";
+						break;
+
+					case Keys.A:
+						output += "a";
+						break;
+
+					case Keys.S:
+						output += "s";
+						break;
+
+					case Keys.D:
+						output += "d";
+						break;
+
+					case Keys.F:
+						output += "f";
+						break;
+
+					case Keys.G:
+						output += "g";
+						break;
+
+					case Keys.H:
+						output += "h";
+						break;
+
+					case Keys.J:
+						output += "j";
+						break;
+
+					case Keys.K:
+						output += "k";
+						break;
+
+					case Keys.L:
+						output += "l";
+						break;
+
+					case Keys.Z:
+						output += "z";
+						break;
+
+					case Keys.X:
+						output += "x";
+						break;
+
+					case Keys.C:
+						output += "c";
+						break;
+
+					case Keys.V:
+						output += "v";
+						break;
+
+					case Keys.B:
+						output += "b";
+						break;
+
+					case Keys.N:
+						output += "n";
+						break;
+
+					case Keys.M:
+						output += "m";
+						break;
+
+					#endregion letters
+
+					default:
+						output += key;
+						break;
+				}
+
+				#endregion notShift
 			}
 
 			return output;
-
 		}
 	}
 }
