@@ -2,10 +2,10 @@
 
 namespace DioLive.Xna.Controls
 {
-    public class Border
-    {
-        public Color Color { get; set; }
+	public class Border
+	{
+		public Color Color { get; set; }
 
-        public int Width { get; set; }
-    }
+		public int Width { get; set; }
+	}
 }
