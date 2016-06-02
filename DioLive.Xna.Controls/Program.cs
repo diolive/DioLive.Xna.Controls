@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace DioLive.Xna.Controls
+﻿namespace DioLive.Xna.Controls
 {
+	using System;
+
 #if WINDOWS || LINUX
 
 	/// <summary>

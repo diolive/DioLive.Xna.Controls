@@ -45,6 +45,8 @@
     <Compile Include="Background.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Helpers\SingletonCreator.cs" />
+    <Compile Include="Helpers\Texture2DHelper.cs" />
     <Compile Include="Pane.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

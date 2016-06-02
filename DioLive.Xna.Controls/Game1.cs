@@ -1,9 +1,9 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-
-namespace DioLive.Xna.Controls
+﻿namespace DioLive.Xna.Controls
 {
+	using Microsoft.Xna.Framework;
+	using Microsoft.Xna.Framework.Graphics;
+	using Microsoft.Xna.Framework.Input;
+
 	/// <summary>
 	/// This is the main type for your game.
 	/// </summary>
@@ -43,40 +43,25 @@ namespace DioLive.Xna.Controls
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
 			// TODO: use this.Content to load your game content here
-			Assets.Load(this.Content);
-			this.c1 = new Container
-			{
-				Location = new Vector2(50, 50),
-				Size = new Vector2(400, 380),
-				Background = Color.Orange,
-			};
-			var c2 = new Container
-			{
-				Location = new Vector2(350, 100),
-				Size = new Vector2(200, 200),
-				Background = Color.LightBlue,
-			};
+			Assets.Instance.Load(this.GraphicsDevice);
+			this.c1 = new Container(new Vector2(50, 50),
+						new Vector2(400, 380),
+						Color.Orange);
+			var c2 = new Container(new Vector2(350, 100),
+						new Vector2(200, 200),
+						Color.LightBlue);
 			this.c1.Items.Add(c2);
-			var c3 = new Container
-			{
-				Location = new Vector2(370, 120),
-				Size = new Vector2(200, 200),
-				Background = Color.Red,
-			};
+			var c3 = new Container(new Vector2(370, 120),
+						new Vector2(200, 200),
+						Color.Red);
 			c2.Items.Add(c3);
-			var c4 = new Container
-			{
-				Location = new Vector2(350, 180),
-				Size = new Vector2(200, 200),
-				Background = Color.Yellow,
-			};
+			var c4 = new Container(new Vector2(350, 180),
+						new Vector2(200, 200),
+						Color.Yellow);
 			this.c1.Items.Add(c4);
-			var c5 = new Container
-			{
-				Location = new Vector2(370, 190),
-				Size = new Vector2(200, 200),
-				Background = Color.Purple,
-			};
+			var c5 = new Container(new Vector2(370, 190),
+						new Vector2(200, 200),
+						Color.Purple);
 			c4.Items.Add(c5);
 			this.c1.Items.Add(c4);
 		}

@@ -1,9 +1,10 @@
-﻿using System;
-using System.Linq.Expressions;
-using System.Reflection;
-
-namespace DioLive.Xna.Controls
+﻿namespace DioLive.Xna.Controls
 {
+	using Algorithms.Extensions.Exceptions;
+	using System;
+	using System.Linq.Expressions;
+	using System.Reflection;
+
 	public class Scope : IDisposable
 	{
 		private readonly Action restore;
@@ -15,10 +16,20 @@ namespace DioLive.Xna.Controls
 
 		public static Scope UseValue<TProperty>(Expression<Func<TProperty>> property, TProperty scopeValue)
 		{
+			if (property == null)
+			{
+				throw new ArgumentNullAppException("Property is Scope.UseValue() is null");
+			}
+
+			if (scopeValue == null)
+			{
+				throw new ArgumentNullAppException("Scope value is Scope.UseValue() is null");
+			}
+
 			MemberExpression memberExpr = property.Body as MemberExpression;
 			if (memberExpr == null)
 			{
-				throw new ArgumentException("Expression should select object field or property", nameof(property));
+				throw new ArgumentAppException("Expression should select object field or property", nameof(property));
 			}
 
 			Func<object, object> getValue;
@@ -40,7 +51,7 @@ namespace DioLive.Xna.Controls
 				}
 				else
 				{
-					throw new ArgumentException("Expression should select object field or property", nameof(property));
+					throw new ArgumentAppException("Expression should select object field or property", nameof(property));
 				}
 			}
 

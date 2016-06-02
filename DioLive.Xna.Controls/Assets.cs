@@ -1,24 +1,47 @@
-﻿using Algorithms.Extensions.Exceptions;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
-
-namespace DioLive.Xna.Controls
+﻿namespace DioLive.Xna.Controls
 {
-	public static class Assets
+	using Algorithms.Extensions;
+	using Algorithms.Extensions.Exceptions;
+	using Helpers;
+	using Microsoft.Xna.Framework;
+	using Microsoft.Xna.Framework.Graphics;
+	using System;
+
+	public class Assets : IDisposable
 	{
-		public static Texture2D Pixel { get; private set; }
+		#region singleton
 
-		public static RasterizerState Scissors { get; private set; }
+		protected Assets() { }
 
-		public static void Load(ContentManager content)
+		public static Assets Instance
 		{
-			if (content == null)
+			get
 			{
-				throw new NullReferenceAppException("Content is null");
+				return SingletonCreator<Assets>.CreatorInstance;
+			}
+		}
+
+		#endregion singleton
+
+		public Texture2D Pixel { get; private set; }
+
+		public RasterizerState Scissors { get; private set; }
+
+		public void Dispose()
+		{
+			this.Scissors.Dispose();
+			GC.SuppressFinalize(this);
+		}
+
+		public void Load(GraphicsDevice graphicsDevice)
+		{
+			if (graphicsDevice == null)
+			{
+				throw new ArgumentNullAppException("Graphic's device is null");
 			}
 
-			Pixel = content.Load<Texture2D>("pixel");
-			Scissors = new RasterizerState { ScissorTestEnable = true };
+			this.Pixel = Texture2DHelper.Generate(graphicsDevice, 1, 1, Color.White);
+			this.Scissors = new RasterizerState { ScissorTestEnable = true };
 		}
 	}
 }
