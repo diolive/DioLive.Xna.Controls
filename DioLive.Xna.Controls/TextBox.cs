@@ -85,7 +85,9 @@
 			Keys.M,
 			Keys.Back,
 			Keys.Space,
+			Keys.Separator
 		};
+		private KeyboardState previousKeyboardState;
 
 		public override void Update(GameTime gameTime)
 		{
@@ -97,7 +99,7 @@
 
 				foreach (var key in keys)
 				{
-					if (state.IsKeyDown(key))
+					if (state.IsKeyUp(key) && (this.previousKeyboardState.IsKeyDown(key)))
 					{
 						if (key == Keys.Back)
 						{
@@ -105,13 +107,19 @@
 							{
 								this.Text = this.Text.Remove(this.Text.Length - 1, 1);
 							}
+							continue;
 						}
-						else
+						if (key == Keys.Space)
 						{
-							this.Text += key;
+							this.Text += " ";
+							continue;
 						}
+
+						this.Text += key;
 					}
 				}
+
+				this.previousKeyboardState = state;
 			}
 		}
 	}
