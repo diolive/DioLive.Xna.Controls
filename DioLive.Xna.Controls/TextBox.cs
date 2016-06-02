@@ -77,6 +77,13 @@
 			}
 		}
 
+
+		private KeyboardState previousKeyboardState;
+
+		#region indiaismymother
+
+		#region allowedkeys
+
 		private readonly Keys[] keys = new Keys[]
 						{
 							Keys.Q,
@@ -136,7 +143,7 @@
 							///////////
 						};
 
-		private KeyboardState previousKeyboardState;
+		#endregion allowedkeys
 
 		private string Map(Keys key, string text, bool isShift)
 		{
@@ -153,6 +160,11 @@
 
 				switch (key)
 				{
+					case Keys.LeftShift:
+						break;
+					case Keys.RightShift:
+						break;
+
 					case Keys.Back:
 						{
 							if (output.Length > 1)
@@ -409,6 +421,11 @@
 
 				switch (key)
 				{
+					case Keys.LeftShift:
+						break;
+					case Keys.RightShift:
+						break;
+
 					case Keys.Back:
 						{
 							if (output.Length > 1)
@@ -661,5 +678,7 @@
 
 			return output;
 		}
+
+		#endregion indiaismymother
 	}
 }
