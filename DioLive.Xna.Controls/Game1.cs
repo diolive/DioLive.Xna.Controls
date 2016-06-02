@@ -43,7 +43,7 @@
 			spriteBatch = new SpriteBatch(GraphicsDevice);
 
 			// TODO: use this.Content to load your game content here
-			Assets.Instance.Load(this.GraphicsDevice);
+			Assets.Instance.Load(this);
 			this.c1 = new Container(new Vector2(50, 50),
 						new Vector2(400, 380),
 						Color.Orange);
@@ -64,6 +64,11 @@
 						Color.Purple);
 			c4.Items.Add(c5);
 			this.c1.Items.Add(c4);
+			var c6 = new TextBox("Hello, world!",
+						new Vector2(50, 60),
+						new Vector2(150, 40),
+						Color.Aqua);
+			this.c1.Items.Add(c6);
 		}
 
 		/// <summary>

@@ -27,20 +27,33 @@
 
 		public RasterizerState Scissors { get; private set; }
 
+		public SpriteFont DefalutFont { get; private set; }
+
 		public void Dispose()
 		{
 			this.Scissors.Dispose();
 			GC.SuppressFinalize(this);
 		}
 
-		public void Load(GraphicsDevice graphicsDevice)
+		public void Load(Game game)
 		{
-			if (graphicsDevice == null)
+			if (game == null)
+			{
+				throw new ArgumentNullAppException("Game is null");
+			}
+
+			if (game.GraphicsDevice == null)
 			{
 				throw new ArgumentNullAppException("Graphic's device is null");
 			}
 
-			this.Pixel = Texture2DHelper.Generate(graphicsDevice, 1, 1, Color.White);
+			if (game.Content == null)
+			{
+				throw new ArgumentNullAppException("Game content is null");
+			}
+
+			this.DefalutFont = game.Content.Load<SpriteFont>("Fonts/DefaultFont");
+			this.Pixel = Texture2DHelper.Generate(game.GraphicsDevice, 1, 1, Color.White);
 			this.Scissors = new RasterizerState { ScissorTestEnable = true };
 		}
 	}

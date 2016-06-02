@@ -9,11 +9,6 @@
 		{
 		}
 
-		/// <summary>
-		/// Text inside the element
-		/// </summary>
-		public string buttonText;
-
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			base.Draw(spriteBatch);

@@ -102,7 +102,7 @@
 
 			if (this.Textures.Count > 0)
 			{
-				spriteBatch.Draw(this.Textures[currentVisibleState], this.InnerBounds, Color.White);
+				spriteBatch.Draw(this.Textures[currentVisibleState], this.Bounds, Color.White);
 			}
 
 			var background = this.Background;
@@ -145,7 +145,7 @@
 				{
 					if (this.previousVisibleState == VisibleState.Pressed)
 					{
-						this.OnMouseClick(null);
+						this.OnMouseClick(EventArgs.Empty);
 					}
 
 					this.currentVisibleState = VisibleState.Hover;
@@ -153,8 +153,9 @@
 			}
 			else
 			{
-				if (this.previousVisibleState == VisibleState.Hover ||
-					this.previousVisibleState == VisibleState.Pressed)
+				//if (this.previousVisibleState == VisibleState.Hover ||
+
+				if (this.previousVisibleState == VisibleState.Pressed)
 				{
 					this.OnMouseOut(EventArgs.Empty);
 				}
@@ -188,6 +189,9 @@
 			}
 
 			this.Border = border;
+
+			this.MouseClick += (s, e) => { this.IsFocused = true; };
+			this.MouseOut += (s, e) => { this.IsFocused = false; };
 		}
 
 		private Vector2 location;
@@ -202,6 +206,8 @@
 		public float Y => this.Location.Y;
 
 		#endregion geometry
+
+		public bool IsFocused { get; set; }
 
 		#region events
 
