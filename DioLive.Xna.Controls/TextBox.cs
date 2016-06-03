@@ -110,6 +110,14 @@
 									this.TextPtr.TextOffset--;
 								}
 								continue;
+							case Keys.Back:
+								{
+									if (this.Text.Length > 0)
+									{
+										this.Text = this.Text.Remove(this.Text.Length - 1, 1);
+									}
+									break;
+								}
 						}
 
 						// TODO bug: Caps + '1' == '!', but has to be '1'
@@ -117,7 +125,15 @@
 									state.IsKeyDown(Keys.RightShift)) ^
 									System.Windows.Forms.Control.IsKeyLocked(System.Windows.Forms.Keys.CapsLock); // TODO to ask about ref
 
-						this.Text = this.Map(key, this.Text, isUppercase);
+						if (this.TextPtr.TextOffset == 0)
+						{
+							this.Text += this.Map(key, isUppercase);
+						}
+						else
+						{
+							char newStr = this.Map(key, isUppercase);
+							this.Text = this.Text.Insert(this.Text.Length - (int)this.TextPtr.TextOffset, new string(new char[] { newStr })); // TODO bullshit, rewrite
+						}
 					}
 				}
 
@@ -197,14 +213,9 @@
 
 		#endregion allowedkeys
 
-		private string Map(Keys key, string text, bool isShift)
+		private char Map(Keys key, bool isShift)
 		{
-			if (text == null)
-			{
-				return null;
-			}
-
-			string output = text.Clone() as string;
+			char output = default(char);
 
 			if (isShift)
 			{
@@ -216,84 +227,77 @@
 					case Keys.RightShift:
 					case Keys.Left:
 					case Keys.Right:
-
-					case Keys.Back:
-						{
-							if (output.Length > 0)
-							{
-								output = output.Remove(output.Length - 1, 1);
-							}
-							break;
-						}
+						break;
+					
 					case Keys.Space:
 						{
-							output += " ";
+							output = ' ';
 							break;
 						}
 
 					case Keys.OemQuestion:          // ?
 						{
-							output += "?";
+							output = '?';
 							break;
 						}
 
 					case Keys.OemPeriod:            // .
 						{
-							output += ">";
+							output = '>';
 							break;
 						}
 
 					case Keys.OemComma:             // ,
 						{
-							output += "<";
+							output = '<';
 							break;
 						}
 
 					case Keys.OemSemicolon:         // ;
 						{
-							output += ":";
+							output = ':';
 							break;
 						}
 
 					case Keys.OemQuotes:            // '
 						{
-							output += "\"";
+							output = '\\';
 							break;
 						}
 
 					case Keys.OemPipe:              // \
 						{
-							output += "|";
+							output = '|';
 							break;
 						}
 
 					case Keys.OemOpenBrackets:      // [
 						{
-							output += "{";
+							output = '{';
 							break;
 						}
 
 					case Keys.OemCloseBrackets:     // ]
 						{
-							output += "}";
+							output = '}';
 							break;
 						}
 
 					case Keys.OemMinus:             // -
 						{
-							output += "_";
+							output = '_';
 							break;
 						}
 
 					case Keys.OemPlus:              // =
 						{
-							output += "+";
+							output = '+';
 							break;
 						}
 
 					case Keys.OemTilde:             // `
 						{
-							output += "~";
+							output = '~';
 							break;
 						}
 
@@ -301,52 +305,52 @@
 
 					case Keys.D0:
 						{
-							output += ")";
+							output = ')';
 							break;
 						}
 					case Keys.D1:
 						{
-							output += "!";
+							output = '!';
 							break;
 						}
 					case Keys.D2:
 						{
-							output += "@";
+							output = '@';
 							break;
 						}
 					case Keys.D3:
 						{
-							output += "#";
+							output = '#';
 							break;
 						}
 					case Keys.D4:
 						{
-							output += "$";
+							output = '$';
 							break;
 						}
 					case Keys.D5:
 						{
-							output += "%";
+							output = '%';
 							break;
 						}
 					case Keys.D6:
 						{
-							output += "^";
+							output = '^';
 							break;
 						}
 					case Keys.D7:
 						{
-							output += "&";
+							output = '&';
 							break;
 						}
 					case Keys.D8:
 						{
-							output += "*";
+							output = '*';
 							break;
 						}
 					case Keys.D9:
 						{
-							output += "(";
+							output = '(';
 							break;
 						}
 
@@ -355,113 +359,112 @@
 					#region letters
 
 					case Keys.Q:
-						output += "Q";
+						output = 'Q';
 						break;
 
 					case Keys.W:
-						output += "W";
+						output = 'W';
 						break;
 
 					case Keys.E:
-						output += "E";
+						output = 'E';
 						break;
 
 					case Keys.R:
-						output += "R";
+						output = 'R';
 						break;
 
 					case Keys.T:
-						output += "T";
+						output = 'T';
 						break;
 
 					case Keys.Y:
-						output += "Y";
+						output = 'Y';
 						break;
 
 					case Keys.U:
-						output += "U";
+						output = 'U';
 						break;
 
 					case Keys.I:
-						output += "I";
+						output = 'I';
 						break;
 
 					case Keys.O:
-						output += "O";
+						output = 'O';
 						break;
 
 					case Keys.P:
-						output += "P";
+						output = 'P';
 						break;
 
 					case Keys.A:
-						output += "A";
+						output = 'A';
 						break;
 
 					case Keys.S:
-						output += "S";
+						output = 'S';
 						break;
 
 					case Keys.D:
-						output += "D";
+						output = 'D';
 						break;
 
 					case Keys.F:
-						output += "F";
+						output = 'F';
 						break;
 
 					case Keys.G:
-						output += "G";
+						output = 'G';
 						break;
 
 					case Keys.H:
-						output += "H";
+						output = 'H';
 						break;
 
 					case Keys.J:
-						output += "J";
+						output = 'J';
 						break;
 
 					case Keys.K:
-						output += "K";
+						output = 'K';
 						break;
 
 					case Keys.L:
-						output += "L";
+						output = 'L';
 						break;
 
 					case Keys.Z:
-						output += "Z";
+						output = 'Z';
 						break;
 
 					case Keys.X:
-						output += "X";
+						output = 'X';
 						break;
 
 					case Keys.C:
-						output += "C";
+						output = 'C';
 						break;
 
 					case Keys.V:
-						output += "V";
+						output = 'V';
 						break;
 
 					case Keys.B:
-						output += "B";
+						output = 'B';
 						break;
 
 					case Keys.N:
-						output += "N";
+						output = 'N';
 						break;
 
 					case Keys.M:
-						output += "M";
+						output = 'M';
 						break;
 
 					#endregion letters
 
 					default:
-						output += key;
 						break;
 				}
 
@@ -479,82 +482,74 @@
 					case Keys.Right:
 						break;
 
-					case Keys.Back:
-						{
-							if (output.Length > 0)
-							{
-								output = output.Remove(output.Length - 1, 1);
-							}
-							break;
-						}
 					case Keys.Space:
 						{
-							output += " ";
+							output = ' ';
 							break;
 						}
 					case Keys.OemQuestion:          // ?
 						{
-							output += "/";
+							output = '/';
 							break;
 						}
 
 					case Keys.OemPeriod:            // .
 						{
-							output += ".";
+							output = '.';
 							break;
 						}
 
 					case Keys.OemComma:             // ,
 						{
-							output += ",";
+							output = ',';
 							break;
 						}
 
 					case Keys.OemSemicolon:         // ;
 						{
-							output += ";";
+							output = ';';
 							break;
 						}
 
 					case Keys.OemQuotes:            // '
 						{
-							output += "'";
+							output = '\'';
 							break;
 						}
 
 					case Keys.OemPipe:              // \
 						{
-							output += "\\";
+							output = '\\';
 							break;
 						}
 
 					case Keys.OemOpenBrackets:      // [
 						{
-							output += "[";
+							output = '[';
 							break;
 						}
 
 					case Keys.OemCloseBrackets:     // ]
 						{
-							output += "]";
+							output = ']';
 							break;
 						}
 
 					case Keys.OemMinus:             // -
 						{
-							output += "-";
+							output = '-';
 							break;
 						}
 
 					case Keys.OemPlus:              // =
 						{
-							output += "=";
+							output = '=';
 							break;
 						}
 
 					case Keys.OemTilde:             // `
 						{
-							output += "`";
+							output = '`';
 							break;
 						}
 
@@ -562,52 +557,52 @@
 
 					case Keys.D0:
 						{
-							output += "0";
+							output = '0';
 							break;
 						}
 					case Keys.D1:
 						{
-							output += "1";
+							output = '1';
 							break;
 						}
 					case Keys.D2:
 						{
-							output += "2";
+							output = '2';
 							break;
 						}
 					case Keys.D3:
 						{
-							output += "3";
+							output = '3';
 							break;
 						}
 					case Keys.D4:
 						{
-							output += "4";
+							output = '4';
 							break;
 						}
 					case Keys.D5:
 						{
-							output += "5";
+							output = '5';
 							break;
 						}
 					case Keys.D6:
 						{
-							output += "6";
+							output = '6';
 							break;
 						}
 					case Keys.D7:
 						{
-							output += "7";
+							output = '7';
 							break;
 						}
 					case Keys.D8:
 						{
-							output += "8";
+							output = '8';
 							break;
 						}
 					case Keys.D9:
 						{
-							output += "9";
+							output = '9';
 							break;
 						}
 
@@ -616,113 +611,112 @@
 					#region letters
 
 					case Keys.Q:
-						output += "q";
+						output = 'q';
 						break;
 
 					case Keys.W:
-						output += "w";
+						output = 'w';
 						break;
 
 					case Keys.E:
-						output += "e";
+						output = 'e';
 						break;
 
 					case Keys.R:
-						output += "r";
+						output = 'r';
 						break;
 
 					case Keys.T:
-						output += "t";
+						output = 't';
 						break;
 
 					case Keys.Y:
-						output += "y";
+						output = 'y';
 						break;
 
 					case Keys.U:
-						output += "u";
+						output = 'u';
 						break;
 
 					case Keys.I:
-						output += "i";
+						output = 'i';
 						break;
 
 					case Keys.O:
-						output += "o";
+						output = 'o';
 						break;
 
 					case Keys.P:
-						output += "p";
+						output = 'p';
 						break;
 
 					case Keys.A:
-						output += "a";
+						output = 'a';
 						break;
 
 					case Keys.S:
-						output += "s";
+						output = 's';
 						break;
 
 					case Keys.D:
-						output += "d";
+						output = 'd';
 						break;
 
 					case Keys.F:
-						output += "f";
+						output = 'f';
 						break;
 
 					case Keys.G:
-						output += "g";
+						output = 'g';
 						break;
 
 					case Keys.H:
-						output += "h";
+						output = 'h';
 						break;
 
 					case Keys.J:
-						output += "j";
+						output = 'j';
 						break;
 
 					case Keys.K:
-						output += "k";
+						output = 'k';
 						break;
 
 					case Keys.L:
-						output += "l";
+						output = 'l';
 						break;
 
 					case Keys.Z:
-						output += "z";
+						output = 'z';
 						break;
 
 					case Keys.X:
-						output += "x";
+						output = 'x';
 						break;
 
 					case Keys.C:
-						output += "c";
+						output = 'c';
 						break;
 
 					case Keys.V:
-						output += "v";
+						output = 'v';
 						break;
 
 					case Keys.B:
-						output += "b";
+						output = 'b';
 						break;
 
 					case Keys.N:
-						output += "n";
+						output = 'n';
 						break;
 
 					case Keys.M:
-						output += "m";
+						output = 'm';
 						break;
 
 					#endregion letters
 
 					default:
-						output += key;
 						break;
 				}
 
