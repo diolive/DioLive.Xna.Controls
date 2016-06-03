@@ -1,12 +1,12 @@
 ﻿namespace DioLive.Xna.Controls
 {
+	using Helpers;
 	using Microsoft.Xna.Framework;
 	using Microsoft.Xna.Framework.Graphics;
 	using Microsoft.Xna.Framework.Input;
-
-	/// <summary>
-	/// This is the main type for your game.
-	/// </summary>
+	using System.Collections.Generic;       /// <summary>
+						/// This is the main type for your game.
+						/// </summary>
 	public class Game1 : Game
 	{
 		private readonly GraphicsDeviceManager graphics;
@@ -66,8 +66,14 @@
 			this.c1.Items.Add(c4);
 			var c6 = new TextBox(":",
 						new Vector2(50, 60),
-						new Vector2(150, 40),
-						Color.Aqua);
+						new Vector2(350, 40),
+						Color.Aqua); // TODO resolve conflict
+			c6.SetTextures(new Dictionary<VisibleState, Texture2D>
+			{
+				{ VisibleState.Normal, Texture2DHelper.Generate(this.GraphicsDevice, (int)c6.Width, (int)c6.Height, Color.Pink)},
+				{ VisibleState.Hover, Texture2DHelper.Generate(this.GraphicsDevice, (int)c6.Width, (int)c6.Height, Color.SkyBlue, 3, Color.Black)},
+				{ VisibleState.Pressed, Texture2DHelper.Generate(this.GraphicsDevice, (int)c6.Width, (int)c6.Height, Color.SkyBlue, 3, Color.Red)},
+			});
 			this.c1.Items.Add(c6);
 		}
 

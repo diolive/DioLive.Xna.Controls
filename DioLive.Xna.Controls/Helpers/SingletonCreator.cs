@@ -3,16 +3,16 @@
 	using System;
 	using System.Reflection;
 
-	public sealed class SingletonCreator<S>
-			where S : class
+	public static class SingletonCreator<T>
+			where T : class
 	{
-		public static S CreatorInstance
+		public static T CreatorInstance
 		{
 			get { return instance; }
 		}
 
 		//Используется Reflection для создания экземпляра класса без публичного конструктора
-		private static readonly S instance = (S)typeof(S).GetConstructor(
+		private static readonly T instance = (T)typeof(T).GetConstructor(
 							    BindingFlags.Instance | BindingFlags.NonPublic,
 							    null,
 							    new Type[0],

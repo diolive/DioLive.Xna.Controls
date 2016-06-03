@@ -21,7 +21,6 @@
 
 			Vector2 padding = new Vector2
 			{
-
 				X = ((this.X - fontSize.X < 0) ?
 						(5) : // 5 is default
 						((this.X - fontSize.X) / 2)
