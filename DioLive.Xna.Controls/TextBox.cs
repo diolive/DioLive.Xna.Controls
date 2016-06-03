@@ -3,7 +3,6 @@
 	using Microsoft.Xna.Framework;
 	using Microsoft.Xna.Framework.Graphics;
 	using Microsoft.Xna.Framework.Input;
-	using System;
 
 	public class TextBox : UIElement
 	{
@@ -19,6 +18,7 @@
 
 			Vector2 fontSize = Font.MeasureString(this.Text);
 
+			// TODO fix padding
 			Vector2 padding = new Vector2
 			{
 				X = ((this.X - fontSize.X < 0) ?
@@ -33,11 +33,14 @@
 			};
 
 			this.Padding = padding;
+			this.TextPtr = new TextBoxPtr();
 		}
 
 		public SpriteFont Font { get; set; }
 
-		public Vector2 Padding { get; set; }
+		public Vector2 Padding { get; set; }// TODO fix padding
+
+		internal Vector2 TextSize => Font.MeasureString(this.Text);
 
 		/// <summary>
 		/// Text inside the element
@@ -54,6 +57,15 @@
 				Y = this.Location.Y + this.Padding.Y
 			};
 
+			Vector2 ptrpos = this.TextPtr.GetAbsolutePosition(this);
+
+			spriteBatch.Draw(Assets.Instance.TextPtr,
+					new Rectangle((int)ptrpos.X,
+							(int)ptrpos.Y,
+							this.TextPtr.Width,
+							this.TextPtr.Height),
+					Color.White);
+
 			spriteBatch.DrawString(Font, this.Text, fontPosition, Color.Black);
 		}
 
@@ -61,6 +73,8 @@
 		{
 			return this.Text;
 		}
+
+		internal TextBoxPtr TextPtr { get; private set; }
 
 		public override void Update(GameTime gameTime)
 		{
@@ -70,11 +84,33 @@
 			{
 				KeyboardState state = Keyboard.GetState();
 
-				foreach (Keys key in Enum.GetValues(typeof(Keys)))
+				foreach (Keys key in keys)
 				{
 					if (state.IsKeyUp(key) && (this.previousKeyboardState.IsKeyDown(key)))
 					{
-						this.Text = Map(key, this.Text, state.IsKeyDown(Keys.LeftShift) || state.IsKeyDown(Keys.RightShift));
+						// TODO bug: Caps + '1' == '!', but has to be '1'
+						bool isUppercase = (state.IsKeyDown(Keys.LeftShift) ||
+									state.IsKeyDown(Keys.RightShift)) ^
+									System.Windows.Forms.Control.IsKeyLocked(System.Windows.Forms.Keys.CapsLock); // TODO to ask about ref
+
+						this.Text = this.Map(key, this.Text, isUppercase);
+
+						switch (key)
+						{
+							case Keys.Left:
+								if (this.TextPtr.TextOffset < this.Text.Length)
+								{
+									this.TextPtr.TextOffset++;
+								}
+								break;
+
+							case Keys.Right:
+								if (this.TextPtr.TextOffset > 0)
+								{
+									this.TextPtr.TextOffset--;
+								}
+								break;
+						}
 					}
 				}
 
@@ -134,6 +170,8 @@
 							Keys.OemMinus,		// -
 							Keys.OemPlus,		// =
 							Keys.OemTilde,		// `
+							Keys.Left,		// left arrow
+							Keys.Right,		// right arrow
 							//////////////////////////
 
 							/////////// arabic numbers
@@ -168,9 +206,9 @@
 				switch (key)
 				{
 					case Keys.LeftShift:
-						break;
 					case Keys.RightShift:
-						break;
+					case Keys.Left:
+					case Keys.Right:
 
 					case Keys.Back:
 						{
@@ -429,8 +467,9 @@
 				switch (key)
 				{
 					case Keys.LeftShift:
-						break;
 					case Keys.RightShift:
+					case Keys.Left:
+					case Keys.Right:
 						break;
 
 					case Keys.Back:

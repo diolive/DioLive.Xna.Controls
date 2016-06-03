@@ -64,7 +64,7 @@
 						Color.Purple);
 			c4.Items.Add(c5);
 			this.c1.Items.Add(c4);
-			var c6 = new TextBox(":",
+			var c6 = new TextBox(string.Empty,
 						new Vector2(50, 60),
 						new Vector2(350, 40),
 						Color.Aqua); // TODO resolve conflict

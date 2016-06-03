@@ -28,6 +28,7 @@
 		public RasterizerState Scissors { get; private set; }
 
 		public SpriteFont DefalutFont { get; private set; }
+		public Texture2D TextPtr { get; private set; }
 
 		public void Dispose()
 		{
@@ -53,6 +54,7 @@
 			}
 
 			this.DefalutFont = game.Content.Load<SpriteFont>("Fonts/DefaultFont");
+			this.TextPtr = Texture2DHelper.Generate(game.GraphicsDevice, 1, 10, Color.Black);
 			this.Pixel = Texture2DHelper.Generate(game.GraphicsDevice, 1, 1, Color.White);
 			this.Scissors = new RasterizerState { ScissorTestEnable = true };
 		}
