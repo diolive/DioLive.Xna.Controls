@@ -59,14 +59,20 @@
 
 			Vector2 ptrpos = this.TextPtr.GetAbsolutePosition(this);
 
-			spriteBatch.Draw(Assets.Instance.TextPtr,
+			using (Scope.UseValue(() => spriteBatch.GraphicsDevice.RasterizerState, Assets.Instance.Scissors))
+			{
+				using (Scope.UseValue(() => spriteBatch.GraphicsDevice.ScissorRectangle, Rectangle.Intersect(this.InnerBounds, spriteBatch.GraphicsDevice.ScissorRectangle)))
+				{
+					spriteBatch.Draw(Assets.Instance.TextPtr,
 					new Rectangle((int)ptrpos.X,
 							(int)ptrpos.Y,
 							this.TextPtr.Width,
 							this.TextPtr.Height),
 					Color.White);
 
-			spriteBatch.DrawString(Font, this.Text, fontPosition, Color.Black);
+					spriteBatch.DrawString(Font, this.Text, fontPosition, Color.Black);
+				}
+			}
 		}
 
 		public override string ToString()
@@ -86,15 +92,9 @@
 
 				foreach (Keys key in keys)
 				{
-					if (state.IsKeyUp(key) && (this.previousKeyboardState.IsKeyDown(key)))
+					if (state.IsKeyUp(key) &&
+						(this.previousKeyboardState.IsKeyDown(key)))
 					{
-						// TODO bug: Caps + '1' == '!', but has to be '1'
-						bool isUppercase = (state.IsKeyDown(Keys.LeftShift) ||
-									state.IsKeyDown(Keys.RightShift)) ^
-									System.Windows.Forms.Control.IsKeyLocked(System.Windows.Forms.Keys.CapsLock); // TODO to ask about ref
-
-						this.Text = this.Map(key, this.Text, isUppercase);
-
 						switch (key)
 						{
 							case Keys.Left:
@@ -102,15 +102,22 @@
 								{
 									this.TextPtr.TextOffset++;
 								}
-								break;
+								continue;
 
 							case Keys.Right:
 								if (this.TextPtr.TextOffset > 0)
 								{
 									this.TextPtr.TextOffset--;
 								}
-								break;
+								continue;
 						}
+
+						// TODO bug: Caps + '1' == '!', but has to be '1'
+						bool isUppercase = (state.IsKeyDown(Keys.LeftShift) ||
+									state.IsKeyDown(Keys.RightShift)) ^
+									System.Windows.Forms.Control.IsKeyLocked(System.Windows.Forms.Keys.CapsLock); // TODO to ask about ref
+
+						this.Text = this.Map(key, this.Text, isUppercase);
 					}
 				}
 
@@ -212,7 +219,7 @@
 
 					case Keys.Back:
 						{
-							if (output.Length > 1)
+							if (output.Length > 0)
 							{
 								output = output.Remove(output.Length - 1, 1);
 							}
@@ -474,7 +481,7 @@
 
 					case Keys.Back:
 						{
-							if (output.Length > 1)
+							if (output.Length > 0)
 							{
 								output = output.Remove(output.Length - 1, 1);
 							}

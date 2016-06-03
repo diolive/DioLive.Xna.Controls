@@ -176,16 +176,15 @@
 			}
 			else
 			{
-				//if (this.previousVisibleState == VisibleState.Hover ||
-				//	this.previousVisibleState == VisibleState.Pressed)
-				//{
-				//	this.OnMouseOut(EventArgs.Empty);
-				//}
+				if (this.previousVisibleState == VisibleState.Hover ||
+					this.previousVisibleState == VisibleState.Pressed)
+				{
+					this.OnMouseOut(EventArgs.Empty);
+				}
 
 				if (this.currentMouseState.LeftButton == ButtonState.Pressed)
 				{
 					this.OnMouseUnclick(EventArgs.Empty);
-
 				}
 
 				this.currentVisibleState = VisibleState.Normal;

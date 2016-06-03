@@ -9,11 +9,11 @@ namespace DioLive.Xna.Controls
 {
 	internal class TextBoxPtr
 	{
-		public TextBoxPtr() : this(Color.Black, 0)
+		internal TextBoxPtr() : this(Color.Black, 0)
 		{
 		}
 
-		public TextBoxPtr(Color color, uint textOffset)
+		internal TextBoxPtr(Color color, uint textOffset)
 		{
 			this.Color = color;
 			this.TextOffset = textOffset;
@@ -21,11 +21,11 @@ namespace DioLive.Xna.Controls
 			this.Height = 30;
 		}
 
-		Color Color { get; set; }
+		internal Color Color { get; set; }
 
 		internal uint TextOffset { get; set; }
-		public int Height { get; internal set; }
-		public int Width { get; internal set; }
+		internal int Height { get; set; }
+		internal int Width { get; set; }
 
 		internal Vector2 GetAbsolutePosition(TextBox textbox)
 		{
@@ -43,7 +43,7 @@ namespace DioLive.Xna.Controls
 			}
 			else
 			{
-				result.X += textbox.Font.MeasureString(textbox.Text.Substring(0, textbox.Text.Length - (int)this.TextOffset)).X;
+				result.X += textbox.Font.MeasureString(textbox.Text.Substring(0, textbox.Text.Length - (int)this.TextOffset)).X; // TODO to optimizate
 			}
 
 			return result;

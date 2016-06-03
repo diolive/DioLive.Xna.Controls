@@ -66,8 +66,9 @@
 			this.c1.Items.Add(c4);
 			var c6 = new TextBox(string.Empty,
 						new Vector2(50, 60),
-						new Vector2(350, 40),
+						new Vector2(100, 40),
 						Color.Aqua); // TODO resolve conflict
+
 			c6.SetTextures(new Dictionary<VisibleState, Texture2D>
 			{
 				{ VisibleState.Normal, Texture2DHelper.Generate(this.GraphicsDevice, (int)c6.Width, (int)c6.Height, Color.Pink)},
