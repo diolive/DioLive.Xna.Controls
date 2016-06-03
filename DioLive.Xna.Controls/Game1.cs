@@ -4,19 +4,21 @@
 	using Microsoft.Xna.Framework;
 	using Microsoft.Xna.Framework.Graphics;
 	using Microsoft.Xna.Framework.Input;
-	using System.Collections.Generic;       /// <summary>
-						/// This is the main type for your game.
-						/// </summary>
+	using System.Collections.Generic;
+
+	/// <summary>
+	/// This is the main type for your game.
+	/// </summary>
 	public class Game1 : Game
 	{
 		private readonly GraphicsDeviceManager graphics;
 		private SpriteBatch spriteBatch;
-		private Container c1;
+		private Container mainContainer;
 
 		public Game1()
 		{
-			graphics = new GraphicsDeviceManager(this);
-			Content.RootDirectory = "Content";
+			this.graphics = new GraphicsDeviceManager(this);
+			this.Content.RootDirectory = "Content";
 		}
 
 		/// <summary>
@@ -27,7 +29,7 @@
 		/// </summary>
 		protected override void Initialize()
 		{
-			// TODO: Add your initialization logic here
+			// Add your initialization logic here
 			this.IsMouseVisible = true;
 
 			base.Initialize();
@@ -40,31 +42,31 @@
 		protected override void LoadContent()
 		{
 			// Create a new SpriteBatch, which can be used to draw textures.
-			spriteBatch = new SpriteBatch(GraphicsDevice);
+			this.spriteBatch = new SpriteBatch(this.GraphicsDevice);
 
-			// TODO: use this.Content to load your game content here
+			// use this.Content to load your game content here
 			Assets.Instance.Load(this);
-			this.c1 = new Container(new Vector2(50, 50),
+			this.mainContainer = new Container(new Vector2(50, 50),
 						new Vector2(400, 380),
 						Color.Orange);
-			var c2 = new Container(new Vector2(350, 100),
+			Container c2 = new Container(new Vector2(350, 100),
 						new Vector2(200, 200),
 						Color.LightBlue);
-			this.c1.Items.Add(c2);
-			var c3 = new Container(new Vector2(370, 120),
+			this.mainContainer.Items.Add(c2);
+			Container c3 = new Container(new Vector2(370, 120),
 						new Vector2(200, 200),
 						Color.Red);
 			c2.Items.Add(c3);
-			var c4 = new Container(new Vector2(350, 180),
+			Container c4 = new Container(new Vector2(350, 180),
 						new Vector2(200, 200),
 						Color.Yellow);
-			this.c1.Items.Add(c4);
-			var c5 = new Container(new Vector2(370, 190),
+			this.mainContainer.Items.Add(c4);
+			Container c5 = new Container(new Vector2(370, 190),
 						new Vector2(200, 200),
 						Color.Purple);
 			c4.Items.Add(c5);
-			this.c1.Items.Add(c4);
-			var c6 = new TextBox(string.Empty,
+			this.mainContainer.Items.Add(c4);
+			TextBox c6 = new TextBox(string.Empty,
 						new Vector2(50, 60),
 						new Vector2(100, 40),
 						Color.Aqua); // TODO resolve conflict
@@ -75,7 +77,7 @@
 				{ VisibleState.Hover, Texture2DHelper.Generate(this.GraphicsDevice, (int)c6.Width, (int)c6.Height, Color.SkyBlue, 3, Color.Black)},
 				{ VisibleState.Pressed, Texture2DHelper.Generate(this.GraphicsDevice, (int)c6.Width, (int)c6.Height, Color.SkyBlue, 3, Color.Red)},
 			});
-			this.c1.Items.Add(c6);
+			this.mainContainer.Items.Add(c6);
 		}
 
 		/// <summary>
@@ -84,7 +86,7 @@
 		/// </summary>
 		protected override void UnloadContent()
 		{
-			// TODO: Unload any non ContentManager content here
+			// Unload any non ContentManager content here
 		}
 
 		/// <summary>
@@ -94,12 +96,15 @@
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
-			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-				Exit();
+			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
+				Keyboard.GetState().IsKeyDown(Keys.Escape))
+			{
+				this.Exit();
+			}
 
-			// TODO: Add your update logic here
+			// Add your update logic here
 
-			c1.Update(gameTime);
+			mainContainer.Update(gameTime);
 
 			base.Update(gameTime);
 		}
@@ -110,11 +115,11 @@
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Draw(GameTime gameTime)
 		{
-			GraphicsDevice.Clear(Color.CornflowerBlue);
+			this.GraphicsDevice.Clear(Color.CornflowerBlue);
 
-			spriteBatch.Begin(SpriteSortMode.Immediate);
-			c1.Draw(spriteBatch);
-			spriteBatch.End();
+			this.spriteBatch.Begin(SpriteSortMode.Immediate);
+			mainContainer.Draw(spriteBatch);
+			this.spriteBatch.End();
 
 			base.Draw(gameTime);
 		}

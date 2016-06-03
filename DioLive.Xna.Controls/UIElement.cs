@@ -42,14 +42,17 @@
 		public Background Background { get; set; }
 		public Border Border { get; set; }
 
+		/// <summary>
+		/// Rectangle without borders
+		/// </summary>
 		public Rectangle InnerBounds
 		{
 			get
 			{
-				var bounds = Bounds;
-				if (Border != null)
+				Rectangle bounds = this.Bounds;
+				if (this.Border != null)
 				{
-					bounds.Inflate(-Border.Width, -Border.Width);
+					bounds.Inflate(-this.Border.Width, -this.Border.Width);
 				}
 				return bounds;
 			}
@@ -107,7 +110,7 @@
 
 			Rectangle bounds = this.Bounds;
 
-			var border = this.Border;
+			Border border = this.Border;
 			if (border != null)
 			{
 				// Top border
@@ -128,7 +131,7 @@
 				spriteBatch.Draw(this.Textures[currentVisibleState], this.Bounds, Color.White);
 			}
 
-			var background = this.Background;
+			Background background = this.Background;
 			if (background != null)
 			{
 				spriteBatch.Draw(Assets.Instance.Pixel, this.InnerBounds, background.Color);
@@ -207,6 +210,9 @@
 
 		#region geometry
 
+		/// <summary>
+		/// Rectangle with borders
+		/// </summary>
 		public Rectangle Bounds => new Rectangle(this.Location.ToPoint(), this.Size.ToPoint());
 		public float Height => this.Size.Y;
 		public float Width => this.Size.X;

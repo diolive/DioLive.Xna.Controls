@@ -34,7 +34,7 @@
 			}
 
 			base.Draw(spriteBatch);
-			var gfx = spriteBatch.GraphicsDevice;
+			GraphicsDevice gfx = spriteBatch.GraphicsDevice;
 
 			using (Scope.UseValue(() => gfx.RasterizerState, Assets.Instance.Scissors))
 			{

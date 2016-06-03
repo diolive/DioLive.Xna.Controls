@@ -13,12 +13,12 @@
 				text = string.Empty;
 			}
 
-			this.Text = text;
 			this.Font = Assets.Instance.DefalutFont;
+			this.Text = text;
 
 			Vector2 fontSize = Font.MeasureString(this.Text);
 
-			// TODO fix padding
+			// TODO fix padding's magic numbers
 			Vector2 padding = new Vector2
 			{
 				X = ((this.X - fontSize.X < 0) ?
@@ -38,12 +38,12 @@
 
 		public SpriteFont Font { get; set; }
 
-		public Vector2 Padding { get; set; }// TODO fix padding
+		public Vector2 Padding { get; set; } // TODO fix padding
 
 		/// <summary>
 		/// Text inside the element
 		/// </summary>
-		public string Text
+		public string Text // string is only type, that can converts to string quickly
 		{
 			get
 			{
@@ -144,7 +144,7 @@
 
 						if (this.TextPtr.TextOffset == 0)
 						{
-							this.Text += this.Map(key, isUppercase);
+							this.Text += this.Map(key, isUppercase); // string is only type, that can converts to string quickly
 						}
 						else
 						{
@@ -159,7 +159,24 @@
 		}
 
 		internal TextBoxPtr TextPtr { get; private set; }
-		internal Vector2 TextSize { get; set; }
+
+		internal Vector2 TextSize
+		{
+			get
+			{
+				if ((this.Text.Length > 0) &&
+					(this.textSize == default(Vector2)))
+				{
+					this.TextSize = Font.MeasureString(this.Text);
+				}
+
+				return this.textSize;
+			}
+			set
+			{
+				this.textSize = value;
+			}
+		}
 
 		/// <summary>
 		/// Using in Textbox Update() method
@@ -232,6 +249,8 @@
 							Keys.D9, //
 							///////////
 						};
+
+		private Vector2 textSize;
 
 		#endregion allowedkeys
 
