@@ -15,6 +15,8 @@ namespace DioLive.Xna.Controls
 
         public int ZOrder { get; set; }
 
+        public Container Parent { get; set; }
+
         public float X => this.Location.X;
 
         public float Y => this.Location.Y;
@@ -23,19 +25,27 @@ namespace DioLive.Xna.Controls
 
         public float Height => this.Size.Y;
 
-        public Rectangle Bounds => new Rectangle(this.Location.ToPoint(), this.Size.ToPoint());
-
-        public Rectangle InnerBounds
+        public Rectangle GetBounds()
         {
-            get
+            if (this.Parent == null)
             {
-                var bounds = Bounds;
-                if (Border != null && Border.Width > 0)
-                {
-                    bounds.Inflate(-Border.Width, -Border.Width);
-                }
-                return bounds;
+                return new Rectangle(this.Location.ToPoint(), this.Size.ToPoint());
             }
+
+            return this.Parent.Layout.GetBounds(this);
+        }
+
+        public Rectangle GetInnerBounds()
+        {
+            Rectangle bounds = this.GetBounds();
+            Border border = this.Border;
+
+            if (border != null && border.Width > 0)
+            {
+                bounds.Inflate(-border.Width, -border.Width);
+            }
+
+            return bounds;
         }
 
         public virtual void Update(GameTime gameTime)
@@ -44,29 +54,18 @@ namespace DioLive.Xna.Controls
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            Rectangle bounds = this.Bounds;
+            Rectangle bounds = GetBounds();
+            Border border = this.Border;
 
-            var border = this.Border;
-            if (border != null && border.Width > 0)
+            if (border != null)
             {
-                // Top border
-                spriteBatch.Draw(Assets.Pixel, new Rectangle(bounds.X, bounds.Y, bounds.Width, border.Width), border.Color);
-
-                // Right border
-                spriteBatch.Draw(Assets.Pixel, new Rectangle(bounds.X + bounds.Width - border.Width, bounds.Y, border.Width, bounds.Height), border.Color);
-
-                // Bottom border
-                spriteBatch.Draw(Assets.Pixel, new Rectangle(bounds.X, bounds.Y + bounds.Height - border.Width, bounds.Width, border.Width), border.Color);
-
-                // Left border
-                spriteBatch.Draw(Assets.Pixel, new Rectangle(bounds.X, bounds.Y, border.Width, bounds.Height), border.Color);
+                border.Draw(spriteBatch, bounds);
+                System.Diagnostics.Debug.WriteLine($"Border: {bounds}");
+                bounds = GetInnerBounds();
             }
 
-            var background = this.Background;
-            if (background != null)
-            {
-                spriteBatch.Draw(Assets.Pixel, this.InnerBounds, background.Color);
-            }
+            this.Background?.Draw(spriteBatch, bounds);
+            System.Diagnostics.Debug.WriteLine($"Background: {bounds}");
         }
     }
 }

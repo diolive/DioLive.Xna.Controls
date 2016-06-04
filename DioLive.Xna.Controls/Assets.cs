@@ -14,5 +14,11 @@ namespace DioLive.Xna.Controls
             Pixel = content.Load<Texture2D>("pixel");
             Scissors = new RasterizerState { ScissorTestEnable = true };
         }
+
+        public static void Unload()
+        {
+            Pixel.Dispose();
+            Scissors.Dispose();
+        }
     }
 }

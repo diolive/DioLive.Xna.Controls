@@ -1,25 +1,65 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Linq;
+
+using DioLive.Xna.Controls.Layouts;
 
 namespace DioLive.Xna.Controls
 {
     public class Container : UIElement
     {
+        private static readonly LayoutBuilder DefaultLayout = (container) => new SimpleLayout(container);
+
+        private List<UIElement> elements;
+
         public Container()
+            : this(DefaultLayout)
         {
-            this.Items = new List<UIElement>();
-            this.Border = new Border { Color = Color.Black, Width = 2 };
         }
 
-        public IList<UIElement> Items { get; }
+        public Container(LayoutBuilder layoutBuilder)
+        {
+            this.elements = new List<UIElement>();
 
-        public IEnumerable<UIElement> GetOrderedElements() => Items.OrderByDescending(e => e.ZOrder);
+            ApplyLayout(layoutBuilder);
+        }
+
+        public ILayout Layout { get; private set; }
+
+        public IList<UIElement> Elements => this.elements.AsReadOnly();
+
+        public IEnumerable<UIElement> GetOrderedElements() => this.elements.OrderByDescending(e => e.ZOrder);
+
+        public void ApplyLayout(LayoutBuilder layoutBuilder)
+        {
+            this.Layout = layoutBuilder(this);
+        }
+
+        public void AddElement(UIElement element)
+        {
+            element.Parent = this;
+            if (!this.elements.Contains(element))
+            {
+                this.elements.Add(element);
+                this.Layout.Invalidate();
+            }
+        }
+
+        public void RemoveElement(UIElement element)
+        {
+            if (this.elements.Contains(element))
+            {
+                this.elements.Remove(element);
+                this.Layout.Invalidate();
+            }
+        }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+
             foreach (var element in this.GetOrderedElements())
             {
                 element.Update(gameTime);
@@ -29,11 +69,12 @@ namespace DioLive.Xna.Controls
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
+
             var gfx = spriteBatch.GraphicsDevice;
 
             using (Scope.UseValue(() => gfx.RasterizerState, Assets.Scissors))
             {
-                using (Scope.UseValue(() => gfx.ScissorRectangle, Rectangle.Intersect(this.InnerBounds, gfx.ScissorRectangle)))
+                using (Scope.UseValue(() => gfx.ScissorRectangle, Rectangle.Intersect(this.GetInnerBounds(), gfx.ScissorRectangle)))
                 {
                     foreach (var element in this.GetOrderedElements())
                     {

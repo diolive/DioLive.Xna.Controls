@@ -43,7 +43,10 @@
     <Compile Include="Background.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="Pane.cs" />
+    <Compile Include="Layouts\ILayout.cs" />
+    <Compile Include="Layouts\LayoutBuilder.cs" />
+    <Compile Include="Layouts\SimpleLayout.cs" />
+    <Compile Include="Layouts\FillLayout.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scope.cs" />

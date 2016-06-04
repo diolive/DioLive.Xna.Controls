@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DioLive.Xna.Controls.Layouts;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -44,7 +45,7 @@ namespace DioLive.Xna.Controls
 
             // TODO: use this.Content to load your game content here
             Assets.Load(this.Content);
-            this.c1 = new Container
+            this.c1 = new Container(FillLayout.GetBuilder())
             {
                 Location = new Vector2(50, 50),
                 Size = new Vector2(400, 380),
@@ -56,29 +57,30 @@ namespace DioLive.Xna.Controls
                 Size = new Vector2(200, 200),
                 Background = Color.LightBlue,
             };
-            this.c1.Items.Add(c2);
+            this.c1.AddElement(c2);
             var c3 = new Container
             {
                 Location = new Vector2(370, 120),
                 Size = new Vector2(200, 200),
                 Background = Color.Red,
             };
-            c2.Items.Add(c3);
+            c2.ApplyLayout(FillLayout.GetBuilder());
+            c2.AddElement(c3);
             var c4 = new Container
             {
                 Location = new Vector2(350, 180),
                 Size = new Vector2(200, 200),
                 Background = Color.Yellow,
             };
-            this.c1.Items.Add(c4);
+            c1.AddElement(c4);
             var c5 = new Container
             {
                 Location = new Vector2(370, 190),
                 Size = new Vector2(200, 200),
                 Background = Color.Purple,
             };
-            c4.Items.Add(c5);
-            this.c1.Items.Add(c4);
+            c4.AddElement(c5);
+            //this.c1.AddElement(c3);
         }
 
         /// <summary>
@@ -87,7 +89,7 @@ namespace DioLive.Xna.Controls
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+            Assets.Unload();
         }
 
         /// <summary>
