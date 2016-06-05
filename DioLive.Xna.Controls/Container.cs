@@ -10,7 +10,7 @@ namespace DioLive.Xna.Controls
 {
     public class Container : UIElement
     {
-        private static readonly LayoutBuilder DefaultLayout = (container) => new SimpleLayout(container);
+        private static readonly LayoutBuilder DefaultLayout = SimpleLayout.GetBuilder();
 
         private List<UIElement> elements;
 
