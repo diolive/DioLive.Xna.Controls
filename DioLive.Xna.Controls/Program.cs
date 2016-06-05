@@ -3,6 +3,7 @@
 namespace DioLive.Xna.Controls
 {
 #if WINDOWS || LINUX
+
     /// <summary>
     /// The main class.
     /// </summary>
@@ -12,11 +13,14 @@ namespace DioLive.Xna.Controls
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        private static void Main()
         {
             using (var game = new Game1())
+            {
                 game.Run();
+            }
         }
     }
+
 #endif
 }
