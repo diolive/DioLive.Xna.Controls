@@ -60,12 +60,10 @@ namespace DioLive.Xna.Controls
             if (border != null)
             {
                 border.Draw(spriteBatch, bounds);
-                System.Diagnostics.Debug.WriteLine($"Border: {bounds}");
                 bounds = GetInnerBounds();
             }
 
             this.Background?.Draw(spriteBatch, bounds);
-            System.Diagnostics.Debug.WriteLine($"Background: {bounds}");
         }
     }
 }
