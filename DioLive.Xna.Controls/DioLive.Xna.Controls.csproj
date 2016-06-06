@@ -44,6 +44,7 @@
     <Compile Include="Background.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Label.cs" />
     <Compile Include="Layouts\ILayout.cs" />
     <Compile Include="Layouts\LayoutBuilder.cs" />
     <Compile Include="Layouts\RelativeLayout.cs" />
