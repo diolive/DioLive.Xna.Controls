@@ -93,10 +93,16 @@
 			stringPosition.X += (int)this.Padding.X;
 			stringPosition.Y += (int)this.Padding.Y;
 
+			if (this.TextSize.X > this.Size.X)
+			{
+				stringPosition.X -= (int)(this.TextSize.X - this.Size.X);
+				stringPosition.X -= (int)this.Padding.X + 5;
+			}
+
 			Vector2 textPtrPosition = new Vector2
 			{
 				X = stringPosition.X,
-				Y = stringPosition.Y
+				Y = stringPosition.Y,
 			};
 
 			if (this.TextPtr.TextOffset == 0)
@@ -105,7 +111,10 @@
 			}
 			else
 			{
-				textPtrPosition.X += this.Font.MeasureString(this.Text.Substring(0, this.Text.Length - (int)this.TextPtr.TextOffset)).X; // TODO to optimizate
+				textPtrPosition.X += this.Font
+							.MeasureString(this.Text
+										.Substring(0, this.Text.Length - (int)this.TextPtr.TextOffset))
+							.X; // TODO to optimizate
 			}
 
 			using (Scope.UseValue(() => spriteBatch.GraphicsDevice.RasterizerState, Assets.Scissors))
