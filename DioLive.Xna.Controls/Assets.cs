@@ -13,6 +13,7 @@
 
 		public static Texture2D TextPtr { get; private set; }
 		public static SpriteFont PTSans14 { get; private set; }
+
 		public static void Load(Game game)
 		{
 			if (game == null)

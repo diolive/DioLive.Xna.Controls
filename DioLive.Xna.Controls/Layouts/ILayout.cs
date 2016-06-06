@@ -2,10 +2,10 @@
 
 namespace DioLive.Xna.Controls.Layouts
 {
-    public interface ILayout
-    {
-        Rectangle GetBounds(UIElement element);
+	public interface ILayout
+	{
+		Rectangle GetBounds(UIElement element);
 
-        void Invalidate();
-    }
+		void Invalidate();
+	}
 }

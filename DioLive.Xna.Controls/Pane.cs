@@ -5,7 +5,7 @@
 
 	public class Pane : Container
 	{
-		public Pane(Vector2 location) 
+		public Pane(Vector2 location)
 		{
 		}
 

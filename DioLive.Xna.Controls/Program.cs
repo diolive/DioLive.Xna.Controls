@@ -4,7 +4,6 @@
 
 #if WINDOWS || LINUX
 
-
 	/// <summary>
 	/// The main class.
 	/// </summary>
@@ -18,7 +17,6 @@
 		{
 			using (var game = new Game1())
 			{
-
 				game.Run();
 			}
 		}
