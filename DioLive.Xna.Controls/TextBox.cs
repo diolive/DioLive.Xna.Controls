@@ -1,8 +1,17 @@
 ﻿namespace DioLive.Xna.Controls
 {
+	using Algorithms.Extensions.Exceptions;
 	using Microsoft.Xna.Framework;
 	using Microsoft.Xna.Framework.Graphics;
 	using Microsoft.Xna.Framework.Input;
+	using System;
+	using System.Collections.Generic;
+	public enum VisibleState
+	{
+		Normal = 0,
+		Pressed = 1,
+		Hover = 2,
+	}
 
 	public class TextBox : UIElement
 	{
@@ -34,6 +43,8 @@
 
 			this.Padding = padding;
 			this.TextPtr = new TextBoxPtr();
+
+			this.Textures = new Dictionary<VisibleState, Texture2D>();
 		}
 
 		public SpriteFont Font { get; set; }
@@ -60,9 +71,51 @@
 			}
 		}
 
+		public void SetTextures(Dictionary<VisibleState, Texture2D> textures)
+		{
+			this.Textures = textures;
+		}
+
+		/// <summary>
+		/// Init it with MonogameStock dictionaries, using SetTextures() method
+		/// </summary>
+		public Dictionary<VisibleState, Texture2D> Textures { get; private set; }
+
 		public override void Draw(SpriteBatch spriteBatch)
 		{
-			base.Draw(spriteBatch);
+			if (spriteBatch == null)
+			{
+				throw new ArgumentNullAppException("Sprite batch is Scope.UseValue() is null");
+			}
+
+			Rectangle bounds = this.GetBounds();
+
+			Border border = this.Border;
+			if (border != null)
+			{
+				// Top border
+				spriteBatch.Draw(Assets.Pixel, new Rectangle(bounds.X, bounds.Y, bounds.Width, border.Width), border.Color);
+
+				// Right border
+				spriteBatch.Draw(Assets.Pixel, new Rectangle(bounds.X + bounds.Width - border.Width, bounds.Y, border.Width, bounds.Height), border.Color);
+
+				// Bottom border
+				spriteBatch.Draw(Assets.Pixel, new Rectangle(bounds.X, bounds.Y + bounds.Height - border.Width, bounds.Width, border.Width), border.Color);
+
+				// Left border
+				spriteBatch.Draw(Assets.Pixel, new Rectangle(bounds.X, bounds.Y, border.Width, bounds.Height), border.Color);
+			}
+
+			if (this.Textures.Count > 0)
+			{
+				spriteBatch.Draw(this.Textures[currentVisibleState], this.GetBounds(), Color.White);
+			}
+
+			Background background = this.Background;
+			if (background != null)
+			{
+				spriteBatch.Draw(Assets.Pixel, this.GetInnerBounds(), background.Color);
+			}
 
 			Vector2 fontPosition = new Vector2
 			{
@@ -70,11 +123,11 @@
 				Y = this.Location.Y + this.Padding.Y
 			};
 
-			Vector2 ptrpos = this.TextPtr.GetAbsolutePosition(this);
+			Vector2 ptrpos = this.TextPtr.GetAbsolutePosition(this); // TODO
 
-			using (Scope.UseValue(() => spriteBatch.GraphicsDevice.RasterizerState, Assets.Scissors))
+			//using (Scope.UseValue(() => spriteBatch.GraphicsDevice.RasterizerState, Assets.Scissors))
 			{
-				using (Scope.UseValue(() => spriteBatch.GraphicsDevice.ScissorRectangle, Rectangle.Intersect(this.GetInnerBounds(), spriteBatch.GraphicsDevice.ScissorRectangle)))
+				//using (Scope.UseValue(() => spriteBatch.GraphicsDevice.ScissorRectangle, Rectangle.Intersect(this.GetInnerBounds(), spriteBatch.GraphicsDevice.ScissorRectangle)))
 				{
 					spriteBatch.Draw(Assets.TextPtr,
 								new Rectangle((int)ptrpos.X,
@@ -88,15 +141,115 @@
 			}
 		}
 
-		// TODO
 		public override string ToString()
 		{
 			return this.Text;
 		}
 
+		protected MouseState currentMouseState;
+		protected VisibleState currentVisibleState = VisibleState.Normal;
+		protected MouseState previousMouseState;
+		protected VisibleState previousVisibleState = VisibleState.Normal;
+
+		#region events
+
+		public event EventHandler MouseClick;
+
+		public event EventHandler MouseUnclick;
+
+		public event EventHandler MouseDown;
+
+		public event EventHandler MouseOut;
+
+		public event EventHandler MouseUp;
+
+		public void OnMouseClick(EventArgs e)
+		{
+			this.MouseClick?.Invoke(this, e);
+		}
+
+		public void OnMouseUnclick(EventArgs e)
+		{
+			this.MouseUnclick?.Invoke(this, e);
+		}
+
+		public void OnMouseDown(EventArgs e)
+		{
+			this.MouseDown?.Invoke(this, e);
+		}
+
+		public void OnMouseOut(EventArgs e)
+		{
+			this.MouseOut?.Invoke(this, e);
+		}
+
+		public void OnMouseUp(EventArgs e)
+		{
+			this.MouseUp?.Invoke(this, e);
+		}
+
+		#endregion events
+
 		public override void Update(GameTime gameTime)
 		{
-			base.Update(gameTime);
+			#region focusUpdate
+
+			this.previousVisibleState = this.currentVisibleState;
+			this.previousMouseState = this.currentMouseState;
+
+			this.currentMouseState = Mouse.GetState();
+
+			if (this.GetBounds().Contains(this.currentMouseState.X, this.currentMouseState.Y))
+			{
+				if (this.currentMouseState.LeftButton == ButtonState.Pressed)
+				{
+					if (this.previousMouseState.LeftButton == ButtonState.Released)
+					{
+						this.currentVisibleState = VisibleState.Pressed;
+						this.IsFocused = true;
+						this.OnMouseDown(EventArgs.Empty);
+					}
+					else
+					{
+						if (this.currentVisibleState != VisibleState.Pressed)
+						{
+							this.currentVisibleState = VisibleState.Hover;
+						}
+					}
+				}
+				else
+				{
+					if (this.previousVisibleState == VisibleState.Pressed)
+					{
+						this.OnMouseClick(EventArgs.Empty);
+					}
+
+					this.currentVisibleState = VisibleState.Hover;
+				}
+			}
+			else
+			{
+				if (this.previousVisibleState == VisibleState.Hover ||
+					this.previousVisibleState == VisibleState.Pressed)
+				{
+					this.OnMouseOut(EventArgs.Empty);
+				}
+
+				if (this.currentMouseState.LeftButton == ButtonState.Pressed)
+				{
+					this.IsFocused = false;
+					this.OnMouseUnclick(EventArgs.Empty);
+				}
+
+				this.currentVisibleState = VisibleState.Normal;
+			}
+
+			if (this.currentMouseState.LeftButton == ButtonState.Released &&
+				this.previousVisibleState == VisibleState.Pressed)
+			{
+				this.OnMouseUp(EventArgs.Empty);
+			}
+			#endregion focusUpdate
 
 			if (this.IsFocused)
 			{
