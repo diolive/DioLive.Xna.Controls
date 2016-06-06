@@ -15,6 +15,10 @@
 
 	public class TextBox : UIElement
 	{
+		public TextBox() : this(string.Empty)
+		{
+		}
+
 		public TextBox(string text) : base()
 		{
 			if (text == null)
