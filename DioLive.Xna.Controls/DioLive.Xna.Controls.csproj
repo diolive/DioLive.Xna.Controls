@@ -46,6 +46,7 @@
     <Compile Include="Game1.cs" />
     <Compile Include="Layouts\ILayout.cs" />
     <Compile Include="Layouts\LayoutBuilder.cs" />
+    <Compile Include="Layouts\RelativeLayout.cs" />
     <Compile Include="Layouts\SimpleLayout.cs" />
     <Compile Include="Layouts\FillLayout.cs" />
     <Compile Include="Program.cs" />
