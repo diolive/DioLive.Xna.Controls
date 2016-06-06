@@ -38,6 +38,7 @@
 		public static void Unload()
 		{
 			Assets.Pixel.Dispose();
+			Assets.TextPtr.Dispose();
 			Assets.Scissors.Dispose();
 		}
 	}
