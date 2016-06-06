@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DioLive.Xna.Controls
+namespace DioLive.Helpers.Properties
 {
     public class PropertyChangedEventArgs<TValue> : EventArgs
     {

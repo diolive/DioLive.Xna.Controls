@@ -1,7 +1,8 @@
-﻿using DioLive.Xna.Controls.Layouts;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+using DioLive.Xna.Controls.Layouts;
 
 namespace DioLive.Xna.Controls
 {
@@ -12,7 +13,7 @@ namespace DioLive.Xna.Controls
     {
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
-        private Container c1;
+        private Container container;
 
         public Game1()
         {
@@ -45,55 +46,23 @@ namespace DioLive.Xna.Controls
 
             // TODO: use this.Content to load your game content here
             Assets.Load(this.Content);
-            this.c1 = new Container(RelativeLayout.GetBuilder())
+            this.container = new Container(RelativeLayout.GetBuilder())
             {
                 Location = new Vector2(50, 50),
                 Size = new Vector2(400, 380),
                 Background = Color.Orange,
             };
 
-            Label l1 = new Label
+            Label label = new Label
             {
                 Location = new Vector2(10, 10),
                 Size = new Vector2(200, 40),
-                Background = Color.DarkGray,
-                Text = "Hello",
+                Font = Assets.PTSans14,
+                Background = Color.DarkGray * 0.5f,
+                Text = "Hello, iggy-iggy-iggy.",
             };
 
-
-            this.c1.AddElement(l1);
-
-            //var c2 = new Container
-            //{
-            //    Location = new Vector2(50, 50),
-            //    Size = new Vector2(300, 300),
-            //    Background = Color.LightBlue,
-            //};
-            //this.c1.AddElement(c2);
-            //var c3 = new Container
-            //{
-            //    Location = new Vector2(370, 120),
-            //    Size = new Vector2(200, 200),
-            //    Background = Color.Red,
-            //};
-            ////c2.ApplyLayout(FillLayout.GetBuilder());
-            //c2.AddElement(c3);
-            //var c4 = new Container
-            //{
-            //    Location = new Vector2(250, 50),
-            //    Size = new Vector2(2000, 200),
-            //    Background = Color.Yellow,
-            //};
-            //c1.AddElement(c4);
-            //var c5 = new Container
-            //{
-            //    Location = new Vector2(370, 190),
-            //    Size = new Vector2(200, 200),
-            //    Background = Color.Purple,
-            //};
-            //c4.AddElement(c5);
-            ////this.c1.AddElement(c3);
-
+            this.container.AddElement(label);
         }
 
         /// <summary>
@@ -129,7 +98,7 @@ namespace DioLive.Xna.Controls
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin(SpriteSortMode.Immediate);
-            c1.Draw(spriteBatch);
+            container.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);

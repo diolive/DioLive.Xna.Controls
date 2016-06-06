@@ -1,4 +1,4 @@
-﻿namespace DioLive.Xna.Controls
+﻿namespace DioLive.Helpers.Properties
 {
     public class PropertyChangingEventArgs<TValue> : PropertyChangedEventArgs<TValue>
     {

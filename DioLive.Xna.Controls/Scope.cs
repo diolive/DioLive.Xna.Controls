@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
-using System.Reflection;
+
+using DioLive.Helpers.Properties;
 
 namespace DioLive.Xna.Controls
 {
@@ -15,40 +16,12 @@ namespace DioLive.Xna.Controls
 
         public static Scope UseValue<TProperty>(Expression<Func<TProperty>> property, TProperty scopeValue)
         {
-            MemberExpression memberExpr = property.Body as MemberExpression;
-            if (memberExpr == null)
-            {
-                throw new ArgumentException("Expression should select object field or property", nameof(property));
-            }
+            PropertyWrapper prop = PropertyWrapper.Wrap(property);
 
-            Func<object, object> getValue;
-            Action<object, object> setValue;
+            object originalValue = prop.GetValue();
+            prop.SetValue(scopeValue);
 
-            PropertyInfo propInfo = memberExpr.Member as PropertyInfo;
-            if (propInfo != null)
-            {
-                getValue = propInfo.GetValue;
-                setValue = propInfo.SetValue;
-            }
-            else
-            {
-                FieldInfo fieldInfo = memberExpr.Member as FieldInfo;
-                if (fieldInfo != null)
-                {
-                    getValue = fieldInfo.GetValue;
-                    setValue = fieldInfo.SetValue;
-                }
-                else
-                {
-                    throw new ArgumentException("Expression should select object field or property", nameof(property));
-                }
-            }
-
-            object target = Expression.Lambda(memberExpr.Expression).Compile().DynamicInvoke();
-            object originalValue = getValue(target);
-            setValue(target, scopeValue);
-
-            return new Scope(() => setValue(target, originalValue));
+            return new Scope(() => prop.SetValue(originalValue));
         }
 
         public void Dispose()

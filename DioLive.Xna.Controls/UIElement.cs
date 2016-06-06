@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using DioLive.Helpers.Properties;
+
 namespace DioLive.Xna.Controls
 {
     public abstract class UIElement
@@ -12,6 +14,9 @@ namespace DioLive.Xna.Controls
         private float width;
         private float height;
         private int zOrder;
+        private Background background;
+        private Border border;
+        private Container parent;
 
         #endregion Fields
 
@@ -29,13 +34,51 @@ namespace DioLive.Xna.Controls
 
         public event PropertyChangedEventHandler<int> ZOrderChanged;
 
+        public event PropertyChangingEventHandler<Background> BackgroundChanging;
+
+        public event PropertyChangedEventHandler<Background> BackgroundChanged;
+
+        public event PropertyChangingEventHandler<Border> BorderChanging;
+
+        public event PropertyChangedEventHandler<Border> BorderChanged;
+
+        public event PropertyChangingEventHandler<Container> ParentChanging;
+
+        public event PropertyChangedEventHandler<Container> ParentChanged;
+
         #endregion Events
 
         #region Properties
 
-        public Background Background { get; set; }
+        public Background Background
+        {
+            get
+            {
+                return this.background;
+            }
+            set
+            {
+                this.SetProperty(() => this.Background, value, () =>
+                {
+                    this.background = value;
+                }, BackgroundChanging, BackgroundChanged);
+            }
+        }
 
-        public Border Border { get; set; }
+        public Border Border
+        {
+            get
+            {
+                return this.border;
+            }
+            set
+            {
+                this.SetProperty(() => Border, value, () =>
+                {
+                    this.border = value;
+                }, BorderChanging, BorderChanged);
+            }
+        }
 
         public float X
         {
@@ -45,17 +88,10 @@ namespace DioLive.Xna.Controls
             }
             set
             {
-                Vector2 oldValue = this.Location;
-                Vector2 newValue = new Vector2(value, this.y);
-
-                if (OnLocationChanging(oldValue, newValue))
+                this.SetProperty(() => this.Location, new Vector2(value, this.y), () =>
                 {
-                    return;
-                }
-
-                this.x = value;
-
-                OnLocationChanged(oldValue, newValue);
+                    this.x = value;
+                }, LocationChanging, LocationChanged);
             }
         }
 
@@ -67,17 +103,10 @@ namespace DioLive.Xna.Controls
             }
             set
             {
-                Vector2 oldValue = this.Location;
-                Vector2 newValue = new Vector2(this.x, value);
-
-                if (OnLocationChanging(oldValue, newValue))
+                this.SetProperty(() => this.Location, new Vector2(this.x, value), () =>
                 {
-                    return;
-                }
-
-                this.y = value;
-
-                OnLocationChanged(oldValue, newValue);
+                    this.y = value;
+                }, LocationChanging, LocationChanged);
             }
         }
 
@@ -89,17 +118,10 @@ namespace DioLive.Xna.Controls
             }
             set
             {
-                Vector2 oldValue = this.Size;
-                Vector2 newValue = new Vector2(value, this.height);
-
-                if (OnSizeChanging(oldValue, newValue))
+                this.SetProperty(() => this.Size, new Vector2(value, this.height), () =>
                 {
-                    return;
-                }
-
-                this.width = value;
-
-                OnSizeChanged(oldValue, newValue);
+                    this.width = value;
+                }, SizeChanging, SizeChanged);
             }
         }
 
@@ -111,17 +133,10 @@ namespace DioLive.Xna.Controls
             }
             set
             {
-                Vector2 oldValue = this.Size;
-                Vector2 newValue = new Vector2(this.width, value);
-
-                if (OnSizeChanging(oldValue, newValue))
+                this.SetProperty(() => this.Size, new Vector2(this.width, value), () =>
                 {
-                    return;
-                }
-
-                this.height = value;
-
-                OnSizeChanged(oldValue, newValue);
+                    this.height = value;
+                }, SizeChanging, SizeChanged);
             }
         }
 
@@ -133,18 +148,11 @@ namespace DioLive.Xna.Controls
             }
             set
             {
-                Vector2 oldValue = this.Location;
-                Vector2 newValue = value;
-
-                if (OnLocationChanging(oldValue, newValue))
+                this.SetProperty(() => this.Location, value, () =>
                 {
-                    return;
-                }
-
-                this.x = value.X;
-                this.y = value.Y;
-
-                OnLocationChanged(oldValue, newValue);
+                    this.x = value.X;
+                    this.y = value.Y;
+                }, LocationChanging, LocationChanged);
             }
         }
 
@@ -156,18 +164,11 @@ namespace DioLive.Xna.Controls
             }
             set
             {
-                Vector2 oldValue = this.Size;
-                Vector2 newValue = value;
-
-                if (OnSizeChanging(oldValue, newValue))
+                this.SetProperty(() => this.Size, value, () =>
                 {
-                    return;
-                }
-
-                this.width = value.X;
-                this.height = value.Y;
-
-                OnSizeChanged(oldValue, newValue);
+                    this.width = value.X;
+                    this.height = value.Y;
+                }, SizeChanging, SizeChanged);
             }
         }
 
@@ -179,21 +180,27 @@ namespace DioLive.Xna.Controls
             }
             set
             {
-                int oldValue = this.zOrder;
-                int newValue = value;
-
-                if (OnZOrderChanging(oldValue, newValue))
+                this.SetProperty(() => this.ZOrder, value, () =>
                 {
-                    return;
-                }
-
-                this.zOrder = value;
-
-                OnZOrderChanged(oldValue, newValue);
+                    this.zOrder = value;
+                }, ZOrderChanging, ZOrderChanged);
             }
         }
 
-        public Container Parent { get; set; }
+        public Container Parent
+        {
+            get
+            {
+                return this.parent;
+            }
+            set
+            {
+                this.SetProperty(() => this.Parent, value, () =>
+                {
+                    this.parent = value;
+                }, ParentChanging, ParentChanged);
+            }
+        }
 
         #endregion Properties
 
@@ -241,48 +248,5 @@ namespace DioLive.Xna.Controls
         }
 
         #endregion Public methods
-
-        #region Protected methods
-
-        protected virtual bool OnLocationChanging(Vector2 oldLocation, Vector2 newLocation)
-        {
-            var eventArgs = new PropertyChangingEventArgs<Vector2>(nameof(Location), oldLocation, newLocation);
-            this.LocationChanging?.Invoke(this, eventArgs);
-            return eventArgs.Cancel;
-        }
-
-        protected virtual void OnLocationChanged(Vector2 oldLocation, Vector2 newLocation)
-        {
-            var eventArgs = new PropertyChangedEventArgs<Vector2>(nameof(Location), oldLocation, newLocation);
-            this.LocationChanged?.Invoke(this, eventArgs);
-        }
-
-        protected virtual bool OnSizeChanging(Vector2 oldSize, Vector2 newSize)
-        {
-            var eventArgs = new PropertyChangingEventArgs<Vector2>(nameof(Size), oldSize, newSize);
-            this.SizeChanging?.Invoke(this, eventArgs);
-            return eventArgs.Cancel;
-        }
-
-        protected virtual void OnSizeChanged(Vector2 oldSize, Vector2 newSize)
-        {
-            var eventArgs = new PropertyChangedEventArgs<Vector2>(nameof(Size), oldSize, newSize);
-            this.SizeChanged?.Invoke(this, eventArgs);
-        }
-
-        protected virtual bool OnZOrderChanging(int oldZOrder, int newZOrder)
-        {
-            var eventArgs = new PropertyChangingEventArgs<int>(nameof(ZOrder), oldZOrder, newZOrder);
-            this.ZOrderChanging?.Invoke(this, eventArgs);
-            return eventArgs.Cancel;
-        }
-
-        protected virtual void OnZOrderChanged(int oldZOrder, int newZOrder)
-        {
-            var eventArgs = new PropertyChangedEventArgs<int>(nameof(ZOrder), oldZOrder, newZOrder);
-            this.ZOrderChanged?.Invoke(this, eventArgs);
-        }
-
-        #endregion Protected methods
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using DioLive.Helpers.Properties;
 using DioLive.Xna.Controls.Layouts;
 
 namespace DioLive.Xna.Controls
