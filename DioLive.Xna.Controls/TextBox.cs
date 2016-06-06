@@ -1,6 +1,7 @@
 ﻿namespace DioLive.Xna.Controls
 {
 	using Algorithms.Extensions.Exceptions;
+	using Interfaces;
 	using Microsoft.Xna.Framework;
 	using Microsoft.Xna.Framework.Graphics;
 	using Microsoft.Xna.Framework.Input;
@@ -13,7 +14,7 @@
 		Hover = 2,
 	}
 
-	public class TextBox : UIElement
+	public class TextBox : UIElement, IHasFocus
 	{
 		public TextBox() : this(string.Empty)
 		{
@@ -35,24 +36,11 @@
 			this.TextPtr = new TextBoxPtr();
 		}
 
-		private void RecalcPadding()
-		{
-			Vector2 fontSize = Font.MeasureString(this.Text);
-
-			// TODO fix padding's magic numbers
-			Vector2 padding = new Vector2
-			{
-				X = Math.Abs((this.Size.X - fontSize.X) / 2),
-
-				Y = Math.Abs((this.Size.Y - fontSize.Y) / 4),
-			};
-
-			this.Padding = padding;
-		}
-
 		public SpriteFont Font { get; set; }
 
-		public Vector2 Padding { get; set; } // TODO fix padding
+		public bool IsFocused { get; set; }
+
+		public Vector2 Padding { get; set; }
 
 		/// <summary>
 		/// Text inside the element
@@ -143,50 +131,6 @@
 		{
 			return this.Text;
 		}
-
-		protected MouseState currentMouseState;
-		protected VisibleState currentVisibleState = VisibleState.Normal;
-		protected MouseState previousMouseState;
-		protected VisibleState previousVisibleState = VisibleState.Normal;
-
-		#region events
-
-		public event EventHandler MouseClick;
-
-		public event EventHandler MouseUnclick;
-
-		public event EventHandler MouseDown;
-
-		public event EventHandler MouseOut;
-
-		public event EventHandler MouseUp;
-
-		public void OnMouseClick(EventArgs e)
-		{
-			this.MouseClick?.Invoke(this, e);
-		}
-
-		public void OnMouseUnclick(EventArgs e)
-		{
-			this.MouseUnclick?.Invoke(this, e);
-		}
-
-		public void OnMouseDown(EventArgs e)
-		{
-			this.MouseDown?.Invoke(this, e);
-		}
-
-		public void OnMouseOut(EventArgs e)
-		{
-			this.MouseOut?.Invoke(this, e);
-		}
-
-		public void OnMouseUp(EventArgs e)
-		{
-			this.MouseUp?.Invoke(this, e);
-		}
-
-		#endregion events
 
 		public override void Update(GameTime gameTime)
 		{
@@ -335,7 +279,13 @@
 			}
 		}
 
-		public bool IsFocused { get; set; }
+		protected MouseState currentMouseState;
+
+		protected VisibleState currentVisibleState = VisibleState.Normal;
+
+		protected MouseState previousMouseState;
+
+		protected VisibleState previousVisibleState = VisibleState.Normal;
 
 		/// <summary>
 		/// Using in Textbox Update() method
@@ -343,6 +293,60 @@
 		private KeyboardState previousKeyboardState;
 
 		private string text;
+
+		private void RecalcPadding()
+		{
+			Vector2 fontSize = Font.MeasureString(this.Text);
+
+			// TODO fix padding's magic numbers
+			Vector2 padding = new Vector2
+			{
+				X = Math.Abs((this.Size.X - fontSize.X) / 2),
+
+				Y = Math.Abs((this.Size.Y - fontSize.Y) / 4),
+			};
+
+			this.Padding = padding;
+		}
+
+		#region events
+
+		public event EventHandler MouseClick;
+
+		public event EventHandler MouseDown;
+
+		public event EventHandler MouseOut;
+
+		public event EventHandler MouseUnclick;
+
+		public event EventHandler MouseUp;
+
+		public void OnMouseClick(EventArgs e)
+		{
+			this.MouseClick?.Invoke(this, e);
+		}
+
+		public void OnMouseDown(EventArgs e)
+		{
+			this.MouseDown?.Invoke(this, e);
+		}
+
+		public void OnMouseOut(EventArgs e)
+		{
+			this.MouseOut?.Invoke(this, e);
+		}
+
+		public void OnMouseUnclick(EventArgs e)
+		{
+			this.MouseUnclick?.Invoke(this, e);
+		}
+
+		public void OnMouseUp(EventArgs e)
+		{
+			this.MouseUp?.Invoke(this, e);
+		}
+
+		#endregion events
 
 		#region indiaismymother
 
