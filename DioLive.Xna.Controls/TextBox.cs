@@ -22,6 +22,7 @@
 
 		public TextBox(string text) : base()
 		{
+			// I don't want to bounding to source order in ctor
 			this.LocationChanged += (s, e) => this.RecalcPadding();
 			this.SizeChanged += (s, e) => this.RecalcPadding();
 
@@ -38,12 +39,14 @@
 
 		public SpriteFont Font { get; set; }
 
-		public bool IsFocused { get; set; }
-
+		/// <summary>
+		/// Well, padding is almost working
+		/// </summary>
 		public Vector2 Padding { get; set; }
 
 		/// <summary>
-		/// Text inside the element
+		/// Text inside the element.
+		/// Updating of this property will recalculate property this.TextSize
 		/// </summary>
 		public string Text // string is only type, that can converts to string quickly
 		{
@@ -55,6 +58,7 @@
 			{
 				this.text = value;
 
+				// first init without bounding to source order in ctor
 				if (this.Font != null)
 				{
 					this.TextSize = Font.MeasureString(this.Text);
@@ -261,10 +265,14 @@
 
 		internal TextBoxPtr TextPtr { get; private set; }
 
+		/// <summary>
+		/// This property autoupdates when this.Text is changing.
+		/// </summary>
 		internal Vector2 TextSize
 		{
 			get
 			{
+				// first init without bounding to source order in ctor
 				if ((this.Text.Length > 0) &&
 					(this.textSize == default(Vector2)))
 				{
@@ -279,18 +287,15 @@
 			}
 		}
 
+		#region states
+
 		protected MouseState currentMouseState;
-
 		protected VisibleState currentVisibleState = VisibleState.Normal;
-
+		protected KeyboardState previousKeyboardState;
 		protected MouseState previousMouseState;
-
 		protected VisibleState previousVisibleState = VisibleState.Normal;
 
-		/// <summary>
-		/// Using in Textbox Update() method
-		/// </summary>
-		private KeyboardState previousKeyboardState;
+		#endregion states
 
 		private string text;
 
@@ -308,6 +313,10 @@
 
 			this.Padding = padding;
 		}
+
+		#region iHasFocus
+
+		public bool IsFocused { get; set; }
 
 		#region events
 
@@ -347,6 +356,8 @@
 		}
 
 		#endregion events
+
+		#endregion iHasFocus
 
 		#region indiaismymother
 
