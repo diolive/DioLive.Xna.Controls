@@ -87,6 +87,7 @@
 		protected override void UnloadContent()
 		{
 			// Unload any non ContentManager content here
+			Assets.Unload();
 		}
 
 		/// <summary>

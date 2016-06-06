@@ -36,5 +36,11 @@
 			Assets.Pixel = Texture2DHelper.Generate(game.GraphicsDevice, 1, 1, Color.White);
 			Assets.Scissors = new RasterizerState { ScissorTestEnable = true };
 		}
+
+		public static void Unload()
+		{
+			Assets.Pixel.Dispose();
+			Assets.Scissors.Dispose();
+		}
 	}
 }
