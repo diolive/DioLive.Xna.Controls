@@ -9,13 +9,13 @@ namespace DioLive.Xna.Controls.Layouts
     public class FillLayout : ILayout
     {
         private Container container;
-        private FillStyles fillStyle;
+        private Direction direction;
         private Dictionary<UIElement, Rectangle> bounds;
 
-        public FillLayout(Container container, FillStyles fillStyle = FillStyles.Horizontal)
+        public FillLayout(Container container, Direction direction = Direction.Horizontal)
         {
             this.container = container;
-            this.fillStyle = fillStyle;
+            this.direction = direction;
             this.bounds = new Dictionary<UIElement, Rectangle>();
         }
 
@@ -31,13 +31,13 @@ namespace DioLive.Xna.Controls.Layouts
 
         public void Invalidate()
         {
-            switch (this.fillStyle)
+            switch (this.direction)
             {
-                case FillStyles.Horizontal:
+                case Direction.Horizontal:
                     this.InvalidateHorizontal();
                     break;
 
-                case FillStyles.Vertical:
+                case Direction.Vertical:
                     this.InvalidateVertical();
                     break;
 
@@ -88,9 +88,9 @@ namespace DioLive.Xna.Controls.Layouts
             }
         }
 
-        public static LayoutBuilder GetBuilder(FillStyles fillStyle = FillStyles.Horizontal) => (c) => new FillLayout(c, fillStyle);
+        public static LayoutBuilder GetBuilder(Direction direction = Direction.Horizontal) => (c) => new FillLayout(c, direction);
 
-        public enum FillStyles : byte
+        public enum Direction : byte
         {
             Horizontal,
             Vertical,
