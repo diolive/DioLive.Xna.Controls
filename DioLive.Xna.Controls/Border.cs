@@ -1,9 +1,9 @@
-﻿using Algorithms.Extensions.Exceptions;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
-namespace DioLive.Xna.Controls
+﻿namespace DioLive.Xna.Controls
 {
+	using Algorithms.Extensions.Exceptions;
+	using Microsoft.Xna.Framework;
+	using Microsoft.Xna.Framework.Graphics;
+
 	public class Border
 	{
 		private int width;

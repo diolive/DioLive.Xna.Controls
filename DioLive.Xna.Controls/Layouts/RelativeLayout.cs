@@ -1,11 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-
-namespace DioLive.Xna.Controls.Layouts
+﻿namespace DioLive.Xna.Controls.Layouts
 {
+	using Microsoft.Xna.Framework;
+	using System;
+
 	public class RelativeLayout : ILayout
 	{
-		private Container container;
+		private readonly Container container;
 
 		public RelativeLayout(Container container)
 		{

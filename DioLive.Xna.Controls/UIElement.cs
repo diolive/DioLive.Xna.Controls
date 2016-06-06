@@ -1,8 +1,8 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-
-namespace DioLive.Xna.Controls
+﻿namespace DioLive.Xna.Controls
 {
+	using Microsoft.Xna.Framework;
+	using Microsoft.Xna.Framework.Graphics;
+
 	public abstract class UIElement
 	{
 		#region Fields

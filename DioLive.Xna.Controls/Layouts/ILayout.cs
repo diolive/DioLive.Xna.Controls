@@ -1,7 +1,7 @@
-﻿using Microsoft.Xna.Framework;
-
-namespace DioLive.Xna.Controls.Layouts
+﻿namespace DioLive.Xna.Controls.Layouts
 {
+	using Microsoft.Xna.Framework;
+
 	public interface ILayout
 	{
 		Rectangle GetBounds(UIElement element);

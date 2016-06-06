@@ -1,10 +1,10 @@
-using DioLive.Xna.Controls.Layouts;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-
 namespace DioLive.Xna.Controls
 {
+	using DioLive.Xna.Controls.Layouts;
+	using Microsoft.Xna.Framework;
+	using Microsoft.Xna.Framework.Graphics;
+	using Microsoft.Xna.Framework.Input;
+
 	/// <summary>
 	/// This is the main type for your game.
 	/// </summary>
@@ -59,7 +59,7 @@ namespace DioLive.Xna.Controls
 				Background = Color.DarkGray,
 				Text = "Hello",
 			};
-			//this.c1.AddElement(l1);
+			this.c1.AddElement(l1);
 
 			TextBox tb = new TextBox(string.Empty)
 			{

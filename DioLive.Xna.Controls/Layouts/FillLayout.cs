@@ -1,16 +1,16 @@
-﻿using Algorithms.Extensions.Exceptions;
-using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace DioLive.Xna.Controls.Layouts
+﻿namespace DioLive.Xna.Controls.Layouts
 {
+	using Algorithms.Extensions.Exceptions;
+	using Microsoft.Xna.Framework;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+
 	public class FillLayout : ILayout
 	{
-		private Container container;
-		private Direction direction;
-		private Dictionary<UIElement, Rectangle> bounds;
+		private readonly Container container;
+		private readonly Direction direction;
+		private readonly Dictionary<UIElement, Rectangle> bounds;
 
 		public FillLayout(Container container, Direction direction = Direction.Horizontal)
 		{

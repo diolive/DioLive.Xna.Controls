@@ -1,7 +1,7 @@
-﻿using Microsoft.Xna.Framework;
-
-namespace DioLive.Xna.Controls
+﻿namespace DioLive.Xna.Controls
 {
+	using Microsoft.Xna.Framework;
+
 	internal class TextBoxPtr
 	{
 		internal TextBoxPtr() : this(Color.Black, 0)

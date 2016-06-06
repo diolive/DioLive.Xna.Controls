@@ -1,11 +1,11 @@
-﻿using Algorithms.Extensions.Exceptions;
-using Microsoft.Xna.Framework;
-
-namespace DioLive.Xna.Controls.Layouts
+﻿namespace DioLive.Xna.Controls.Layouts
 {
+	using Algorithms.Extensions.Exceptions;
+	using Microsoft.Xna.Framework;
+
 	public class SimpleLayout : ILayout
 	{
-		private Container container;
+		private readonly Container container;
 
 		public SimpleLayout(Container container)
 		{

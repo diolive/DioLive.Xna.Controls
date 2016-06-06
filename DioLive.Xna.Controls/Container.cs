@@ -1,11 +1,11 @@
-﻿using DioLive.Xna.Controls.Layouts;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace DioLive.Xna.Controls
+﻿namespace DioLive.Xna.Controls
 {
+	using DioLive.Xna.Controls.Layouts;
+	using Microsoft.Xna.Framework;
+	using Microsoft.Xna.Framework.Graphics;
+	using System.Collections.Generic;
+	using System.Linq;
+
 	public class Container : UIElement
 	{
 		private static readonly LayoutBuilder DefaultLayout = SimpleLayout.GetBuilder();
