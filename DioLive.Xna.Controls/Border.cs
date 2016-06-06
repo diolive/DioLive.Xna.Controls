@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Algorithms.Extensions.Exceptions;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace DioLive.Xna.Controls
 {
@@ -26,7 +26,7 @@ namespace DioLive.Xna.Controls
 			{
 				if (value < 0)
 				{
-					throw new ArgumentException("Border width cannot be less than zero", nameof(Width));
+					throw new ArgumentAppException("Border width cannot be less than zero", nameof(Width));
 				}
 
 				this.width = value;

@@ -1,5 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using Algorithms.Extensions.Exceptions;
+using Microsoft.Xna.Framework;
 
 namespace DioLive.Xna.Controls.Layouts
 {
@@ -16,7 +16,7 @@ namespace DioLive.Xna.Controls.Layouts
 		{
 			if (!this.container.Elements.Contains(element))
 			{
-				throw new ArgumentException("Element was not found in this layout");
+				throw new ArgumentAppException("Element was not found in this layout");
 			}
 
 			return new Rectangle(element.Location.ToPoint(), element.Size.ToPoint());

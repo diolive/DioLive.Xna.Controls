@@ -78,7 +78,7 @@
 		{
 			if (spriteBatch == null)
 			{
-				throw new ArgumentNullAppException("Sprite batch is Scope.UseValue() is null");
+				throw new ArgumentNullAppException($"Sprite batch in {nameof(Draw)} is null");
 			}
 
 			Background background = this.Background;
@@ -89,6 +89,8 @@
 
 			var a = this.TextPtr.GetAbsolutePosition(this);
 
+			/////////
+
 			Point stringPosition = this.GetInnerBounds().Location;
 			stringPosition.X += (int)this.Padding.X;
 			stringPosition.Y += (int)this.Padding.Y;
@@ -98,6 +100,8 @@
 				stringPosition.X -= (int)(this.TextSize.X - this.Size.X);
 				stringPosition.X -= (int)this.Padding.X + 5;
 			}
+
+			/////////
 
 			Vector2 textPtrPosition = new Vector2
 			{
@@ -116,6 +120,8 @@
 										.Substring(0, this.Text.Length - (int)this.TextPtr.TextOffset))
 							.X; // TODO to optimizate
 			}
+
+			/////////
 
 			using (Scope.UseValue(() => spriteBatch.GraphicsDevice.RasterizerState, Assets.Scissors))
 			{

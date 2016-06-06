@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Algorithms.Extensions.Exceptions;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace DioLive.Xna.Controls.Layouts
 		{
 			if (!this.container.Elements.Contains(element))
 			{
-				throw new ArgumentException("Element was not found in this layout");
+				throw new ArgumentAppException("Element was not found in this layout");
 			}
 
 			return this.bounds[element];
@@ -41,7 +42,7 @@ namespace DioLive.Xna.Controls.Layouts
 					break;
 
 				default:
-					throw new InvalidOperationException("Unknown fill style");
+					throw new InvalidOperationAppException("Unknown fill style");
 			}
 		}
 
