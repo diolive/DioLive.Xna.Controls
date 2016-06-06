@@ -6,14 +6,14 @@
 
 	public class TextBox : UIElement
 	{
-		public TextBox(string text, Vector2 location, Vector2 size, Background background, Border border = null) : base(location, size, background, border)
+		public TextBox(string text) : base()
 		{
 			if (text == null)
 			{
 				text = string.Empty;
 			}
 
-			this.Font = Assets.DefalutFont;
+			this.Font = Assets.PTSans14;
 			this.Text = text;
 
 			Vector2 fontSize = Font.MeasureString(this.Text);
@@ -74,14 +74,14 @@
 
 			using (Scope.UseValue(() => spriteBatch.GraphicsDevice.RasterizerState, Assets.Scissors))
 			{
-				using (Scope.UseValue(() => spriteBatch.GraphicsDevice.ScissorRectangle, Rectangle.Intersect(this.InnerBounds, spriteBatch.GraphicsDevice.ScissorRectangle)))
+				using (Scope.UseValue(() => spriteBatch.GraphicsDevice.ScissorRectangle, Rectangle.Intersect(this.GetInnerBounds(), spriteBatch.GraphicsDevice.ScissorRectangle)))
 				{
 					spriteBatch.Draw(Assets.TextPtr,
-					new Rectangle((int)ptrpos.X,
-							(int)ptrpos.Y,
-							this.TextPtr.Width,
-							this.TextPtr.Height),
-					Color.White);
+								new Rectangle((int)ptrpos.X,
+										(int)ptrpos.Y,
+										this.TextPtr.Width,
+										this.TextPtr.Height),
+								Color.White);
 
 					spriteBatch.DrawString(Font, this.Text, fontPosition, Color.Black);
 				}
@@ -177,6 +177,8 @@
 				this.textSize = value;
 			}
 		}
+
+		public bool IsFocused { get; set; }
 
 		/// <summary>
 		/// Using in Textbox Update() method

@@ -11,9 +11,8 @@
 
 		public static RasterizerState Scissors { get; private set; }
 
-		public static SpriteFont DefalutFont { get; private set; }
 		public static Texture2D TextPtr { get; private set; }
-
+		public static SpriteFont PTSans14 { get; private set; }
 		public static void Load(Game game)
 		{
 			if (game == null)
@@ -30,8 +29,7 @@
 			{
 				throw new ArgumentNullAppException("Game content is null");
 			}
-
-			Assets.DefalutFont = game.Content.Load<SpriteFont>("Fonts/DefaultFont");
+			Assets.PTSans14 = game.Content.Load<SpriteFont>("fonts/PT Sans, 14");
 			Assets.TextPtr = Texture2DHelper.Generate(game.GraphicsDevice, 1, 10, Color.Black);
 			Assets.Pixel = Texture2DHelper.Generate(game.GraphicsDevice, 1, 1, Color.White);
 			Assets.Scissors = new RasterizerState { ScissorTestEnable = true };

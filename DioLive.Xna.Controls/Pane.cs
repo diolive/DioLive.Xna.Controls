@@ -5,7 +5,7 @@
 
 	public class Pane : Container
 	{
-		public Pane(Vector2 location, Vector2 size, Background background, Border border = null) : base(location, size, background, border)
+		public Pane(Vector2 location) 
 		{
 		}
 
