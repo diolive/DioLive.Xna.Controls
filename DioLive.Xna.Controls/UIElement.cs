@@ -1,5 +1,9 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Algorithms.Extensions.Exceptions;
+    using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Graphics;
+    using Microsoft.Xna.Framework.Input;
+    using System;
+    using System.Collections.Generic;
 
 namespace DioLive.Xna.Controls
 {
@@ -35,7 +39,8 @@ namespace DioLive.Xna.Controls
 
         public Background Background { get; set; }
 
-        public Border Border { get; set; }
+		private Vector2 location;
+		private Vector2 size;
 
         public float X
         {
@@ -285,4 +290,5 @@ namespace DioLive.Xna.Controls
 
         #endregion Protected methods
     }
+
 }

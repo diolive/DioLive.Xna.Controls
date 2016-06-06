@@ -1,59 +1,70 @@
-﻿using System;
-using System.Linq.Expressions;
-using System.Reflection;
-
-namespace DioLive.Xna.Controls
+﻿namespace DioLive.Xna.Controls
 {
-    public class Scope : IDisposable
-    {
-        private Action restore;
+	using Algorithms.Extensions.Exceptions;
+	using System;
+	using System.Linq.Expressions;
+	using System.Reflection;
 
-        private Scope(Action restore)
-        {
-            this.restore = restore;
-        }
+	public class Scope : IDisposable
+	{
+		private readonly Action restore;
 
-        public static Scope UseValue<TProperty>(Expression<Func<TProperty>> property, TProperty scopeValue)
-        {
-            MemberExpression memberExpr = property.Body as MemberExpression;
-            if (memberExpr == null)
-            {
-                throw new ArgumentException("Expression should select object field or property", nameof(property));
-            }
+		private Scope(Action restore)
+		{
+			this.restore = restore;
+		}
 
-            Func<object, object> getValue;
-            Action<object, object> setValue;
+		public static Scope UseValue<TProperty>(Expression<Func<TProperty>> property, TProperty scopeValue)
+		{
+			if (property == null)
+			{
+				throw new ArgumentNullAppException("Property is Scope.UseValue() is null");
+			}
 
-            PropertyInfo propInfo = memberExpr.Member as PropertyInfo;
-            if (propInfo != null)
-            {
-                getValue = propInfo.GetValue;
-                setValue = propInfo.SetValue;
-            }
-            else
-            {
-                FieldInfo fieldInfo = memberExpr.Member as FieldInfo;
-                if (fieldInfo != null)
-                {
-                    getValue = fieldInfo.GetValue;
-                    setValue = fieldInfo.SetValue;
-                }
-                else
-                {
-                    throw new ArgumentException("Expression should select object field or property", nameof(property));
-                }
-            }
+			if (scopeValue == null)
+			{
+				throw new ArgumentNullAppException("Scope value is Scope.UseValue() is null");
+			}
 
-            object target = Expression.Lambda(memberExpr.Expression).Compile().DynamicInvoke();
-            object originalValue = getValue(target);
-            setValue(target, scopeValue);
+			MemberExpression memberExpr = property.Body as MemberExpression;
+			if (memberExpr == null)
+			{
+				throw new ArgumentAppException("Expression should select object field or property", nameof(property));
+			}
 
-            return new Scope(() => setValue(target, originalValue));
-        }
+			Func<object, object> getValue;
+			Action<object, object> setValue;
 
-        public void Dispose()
-        {
-            this.restore();
-        }
-    }
+			PropertyInfo propInfo = memberExpr.Member as PropertyInfo;
+			if (propInfo != null)
+			{
+				getValue = propInfo.GetValue;
+				setValue = propInfo.SetValue;
+			}
+			else
+			{
+				FieldInfo fieldInfo = memberExpr.Member as FieldInfo;
+				if (fieldInfo != null)
+				{
+					getValue = fieldInfo.GetValue;
+					setValue = fieldInfo.SetValue;
+				}
+				else
+				{
+					throw new ArgumentAppException("Expression should select object field or property", nameof(property));
+				}
+			}
+
+			object target = Expression.Lambda(memberExpr.Expression).Compile().DynamicInvoke();
+			object originalValue = getValue(target);
+			setValue(target, scopeValue);
+
+			return new Scope(() => setValue(target, originalValue));
+		}
+
+		public void Dispose()
+		{
+			this.restore();
+		}
+	}
 }
