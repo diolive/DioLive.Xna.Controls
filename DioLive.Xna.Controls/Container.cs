@@ -24,6 +24,9 @@ namespace DioLive.Xna.Controls
             this.elements = new List<UIElement>();
 
             ApplyLayout(layoutBuilder);
+
+            this.LocationChanged += (s, e) => this.Layout.Invalidate();
+            this.SizeChanged += (s, e) => this.Layout.Invalidate();
         }
 
         public ILayout Layout { get; private set; }
@@ -44,6 +47,10 @@ namespace DioLive.Xna.Controls
             {
                 this.elements.Add(element);
                 this.Layout.Invalidate();
+
+                element.LocationChanged += Element_PropertyChanged;
+                element.SizeChanged += Element_PropertyChanged;
+                element.ZOrderChanged += Element_PropertyChanged;
             }
         }
 
@@ -53,6 +60,10 @@ namespace DioLive.Xna.Controls
             {
                 this.elements.Remove(element);
                 this.Layout.Invalidate();
+
+                element.LocationChanged -= Element_PropertyChanged;
+                element.SizeChanged -= Element_PropertyChanged;
+                element.ZOrderChanged -= Element_PropertyChanged;
             }
         }
 
@@ -82,6 +93,11 @@ namespace DioLive.Xna.Controls
                     }
                 }
             }
+        }
+
+        private void Element_PropertyChanged<T>(object sender, PropertyChangedEventArgs<T> eventArgs)
+        {
+            this.Layout.Invalidate();
         }
     }
 }

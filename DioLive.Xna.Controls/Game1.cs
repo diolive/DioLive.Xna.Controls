@@ -45,42 +45,55 @@ namespace DioLive.Xna.Controls
 
             // TODO: use this.Content to load your game content here
             Assets.Load(this.Content);
-            this.c1 = new Container(FillLayout.GetBuilder())
+            this.c1 = new Container(RelativeLayout.GetBuilder())
             {
                 Location = new Vector2(50, 50),
                 Size = new Vector2(400, 380),
                 Background = Color.Orange,
             };
-            var c2 = new Container
+
+            Label l1 = new Label
             {
-                Location = new Vector2(350, 100),
-                Size = new Vector2(200, 200),
-                Background = Color.LightBlue,
+                Location = new Vector2(10, 10),
+                Size = new Vector2(200, 40),
+                Background = Color.DarkGray,
+                Text = "Hello",
             };
-            this.c1.AddElement(c2);
-            var c3 = new Container
-            {
-                Location = new Vector2(370, 120),
-                Size = new Vector2(200, 200),
-                Background = Color.Red,
-            };
-            c2.ApplyLayout(FillLayout.GetBuilder());
-            c2.AddElement(c3);
-            var c4 = new Container
-            {
-                Location = new Vector2(350, 180),
-                Size = new Vector2(200, 200),
-                Background = Color.Yellow,
-            };
-            c1.AddElement(c4);
-            var c5 = new Container
-            {
-                Location = new Vector2(370, 190),
-                Size = new Vector2(200, 200),
-                Background = Color.Purple,
-            };
-            c4.AddElement(c5);
-            //this.c1.AddElement(c3);
+
+
+            this.c1.AddElement(l1);
+
+            //var c2 = new Container
+            //{
+            //    Location = new Vector2(50, 50),
+            //    Size = new Vector2(300, 300),
+            //    Background = Color.LightBlue,
+            //};
+            //this.c1.AddElement(c2);
+            //var c3 = new Container
+            //{
+            //    Location = new Vector2(370, 120),
+            //    Size = new Vector2(200, 200),
+            //    Background = Color.Red,
+            //};
+            ////c2.ApplyLayout(FillLayout.GetBuilder());
+            //c2.AddElement(c3);
+            //var c4 = new Container
+            //{
+            //    Location = new Vector2(250, 50),
+            //    Size = new Vector2(2000, 200),
+            //    Background = Color.Yellow,
+            //};
+            //c1.AddElement(c4);
+            //var c5 = new Container
+            //{
+            //    Location = new Vector2(370, 190),
+            //    Size = new Vector2(200, 200),
+            //    Background = Color.Purple,
+            //};
+            //c4.AddElement(c5);
+            ////this.c1.AddElement(c3);
+
         }
 
         /// <summary>
