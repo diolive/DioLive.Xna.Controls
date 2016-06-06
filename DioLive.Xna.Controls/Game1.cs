@@ -45,7 +45,7 @@
 			this.spriteBatch = new SpriteBatch(this.GraphicsDevice);
 
 			// use this.Content to load your game content here
-			Assets.Instance.Load(this);
+			Assets.Load(this);
 			this.mainContainer = new Container(new Vector2(50, 50),
 						new Vector2(400, 380),
 						Color.Orange);

@@ -13,7 +13,7 @@
 				text = string.Empty;
 			}
 
-			this.Font = Assets.Instance.DefalutFont;
+			this.Font = Assets.DefalutFont;
 			this.Text = text;
 
 			Vector2 fontSize = Font.MeasureString(this.Text);
@@ -72,11 +72,11 @@
 
 			Vector2 ptrpos = this.TextPtr.GetAbsolutePosition(this);
 
-			using (Scope.UseValue(() => spriteBatch.GraphicsDevice.RasterizerState, Assets.Instance.Scissors))
+			using (Scope.UseValue(() => spriteBatch.GraphicsDevice.RasterizerState, Assets.Scissors))
 			{
 				using (Scope.UseValue(() => spriteBatch.GraphicsDevice.ScissorRectangle, Rectangle.Intersect(this.InnerBounds, spriteBatch.GraphicsDevice.ScissorRectangle)))
 				{
-					spriteBatch.Draw(Assets.Instance.TextPtr,
+					spriteBatch.Draw(Assets.TextPtr,
 					new Rectangle((int)ptrpos.X,
 							(int)ptrpos.Y,
 							this.TextPtr.Width,

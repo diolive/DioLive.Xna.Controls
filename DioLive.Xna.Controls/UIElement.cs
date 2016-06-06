@@ -114,16 +114,16 @@
 			if (border != null)
 			{
 				// Top border
-				spriteBatch.Draw(Assets.Instance.Pixel, new Rectangle(bounds.X, bounds.Y, bounds.Width, border.Width), border.Color);
+				spriteBatch.Draw(Assets.Pixel, new Rectangle(bounds.X, bounds.Y, bounds.Width, border.Width), border.Color);
 
 				// Right border
-				spriteBatch.Draw(Assets.Instance.Pixel, new Rectangle(bounds.X + bounds.Width - border.Width, bounds.Y, border.Width, bounds.Height), border.Color);
+				spriteBatch.Draw(Assets.Pixel, new Rectangle(bounds.X + bounds.Width - border.Width, bounds.Y, border.Width, bounds.Height), border.Color);
 
 				// Bottom border
-				spriteBatch.Draw(Assets.Instance.Pixel, new Rectangle(bounds.X, bounds.Y + bounds.Height - border.Width, bounds.Width, border.Width), border.Color);
+				spriteBatch.Draw(Assets.Pixel, new Rectangle(bounds.X, bounds.Y + bounds.Height - border.Width, bounds.Width, border.Width), border.Color);
 
 				// Left border
-				spriteBatch.Draw(Assets.Instance.Pixel, new Rectangle(bounds.X, bounds.Y, border.Width, bounds.Height), border.Color);
+				spriteBatch.Draw(Assets.Pixel, new Rectangle(bounds.X, bounds.Y, border.Width, bounds.Height), border.Color);
 			}
 
 			if (this.Textures.Count > 0)
@@ -134,7 +134,7 @@
 			Background background = this.Background;
 			if (background != null)
 			{
-				spriteBatch.Draw(Assets.Instance.Pixel, this.InnerBounds, background.Color);
+				spriteBatch.Draw(Assets.Pixel, this.InnerBounds, background.Color);
 			}
 		}
 

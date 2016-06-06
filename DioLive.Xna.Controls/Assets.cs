@@ -1,42 +1,20 @@
 ﻿namespace DioLive.Xna.Controls
 {
-	using Algorithms.Extensions;
 	using Algorithms.Extensions.Exceptions;
 	using Helpers;
 	using Microsoft.Xna.Framework;
 	using Microsoft.Xna.Framework.Graphics;
-	using System;
 
-	public class Assets : IDisposable
+	public static class Assets
 	{
-		#region singleton
+		public static Texture2D Pixel { get; private set; }
 
-		protected Assets() { }
+		public static RasterizerState Scissors { get; private set; }
 
-		public static Assets Instance
-		{
-			get
-			{
-				return SingletonCreator<Assets>.CreatorInstance;
-			}
-		}
+		public static SpriteFont DefalutFont { get; private set; }
+		public static Texture2D TextPtr { get; private set; }
 
-		#endregion singleton
-
-		public Texture2D Pixel { get; private set; }
-
-		public RasterizerState Scissors { get; private set; }
-
-		public SpriteFont DefalutFont { get; private set; }
-		public Texture2D TextPtr { get; private set; }
-
-		public void Dispose()
-		{
-			this.Scissors.Dispose();
-			GC.SuppressFinalize(this);
-		}
-
-		public void Load(Game game)
+		public static void Load(Game game)
 		{
 			if (game == null)
 			{
@@ -53,10 +31,10 @@
 				throw new ArgumentNullAppException("Game content is null");
 			}
 
-			this.DefalutFont = game.Content.Load<SpriteFont>("Fonts/DefaultFont");
-			this.TextPtr = Texture2DHelper.Generate(game.GraphicsDevice, 1, 10, Color.Black);
-			this.Pixel = Texture2DHelper.Generate(game.GraphicsDevice, 1, 1, Color.White);
-			this.Scissors = new RasterizerState { ScissorTestEnable = true };
+			Assets.DefalutFont = game.Content.Load<SpriteFont>("Fonts/DefaultFont");
+			Assets.TextPtr = Texture2DHelper.Generate(game.GraphicsDevice, 1, 10, Color.Black);
+			Assets.Pixel = Texture2DHelper.Generate(game.GraphicsDevice, 1, 1, Color.White);
+			Assets.Scissors = new RasterizerState { ScissorTestEnable = true };
 		}
 	}
 }

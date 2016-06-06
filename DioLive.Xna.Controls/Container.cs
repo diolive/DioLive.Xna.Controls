@@ -36,7 +36,7 @@
 			base.Draw(spriteBatch);
 			GraphicsDevice gfx = spriteBatch.GraphicsDevice;
 
-			using (Scope.UseValue(() => gfx.RasterizerState, Assets.Instance.Scissors))
+			using (Scope.UseValue(() => gfx.RasterizerState, Assets.Scissors))
 			{
 				using (Scope.UseValue(() => gfx.ScissorRectangle, Rectangle.Intersect(this.InnerBounds, gfx.ScissorRectangle)))
 				{
