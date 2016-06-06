@@ -5,7 +5,7 @@
 	using Microsoft.Xna.Framework.Graphics;
 	using Microsoft.Xna.Framework.Input;
 	using System;
-	using System.Collections.Generic;
+
 	public enum VisibleState
 	{
 		Normal = 0,
@@ -21,6 +21,9 @@
 
 		public TextBox(string text) : base()
 		{
+			this.LocationChanged += (s, e) => this.RecalcPadding();
+			this.SizeChanged += (s, e) => this.RecalcPadding();
+
 			if (text == null)
 			{
 				text = string.Empty;
@@ -29,25 +32,22 @@
 			this.Font = Assets.PTSans14;
 			this.Text = text;
 
+			this.TextPtr = new TextBoxPtr();
+		}
+
+		private void RecalcPadding()
+		{
 			Vector2 fontSize = Font.MeasureString(this.Text);
 
 			// TODO fix padding's magic numbers
 			Vector2 padding = new Vector2
 			{
-				X = ((this.X - fontSize.X < 0) ?
-						(5) : // 5 is default
-						((this.X - fontSize.X) / 2)
-						),
+				X = Math.Abs((this.Size.X - fontSize.X) / 2),
 
-				Y = ((this.Y - fontSize.Y < 0) ?
-						(0) :
-						((this.Y - fontSize.Y) / 4)
-						) // why 4? #diefrontenddie
+				Y = Math.Abs((this.Size.Y - fontSize.Y) / 4),
 			};
 
 			this.Padding = padding;
-			this.TextPtr = new TextBoxPtr();
-
 		}
 
 		public SpriteFont Font { get; set; }
@@ -74,30 +74,11 @@
 			}
 		}
 
-
 		public override void Draw(SpriteBatch spriteBatch)
 		{
 			if (spriteBatch == null)
 			{
 				throw new ArgumentNullAppException("Sprite batch is Scope.UseValue() is null");
-			}
-
-			Rectangle bounds = this.GetBounds();
-
-			Border border = this.Border;
-			if (border != null)
-			{
-				// Top border
-				spriteBatch.Draw(Assets.Pixel, new Rectangle(bounds.X, bounds.Y, bounds.Width, border.Width), border.Color);
-
-				// Right border
-				spriteBatch.Draw(Assets.Pixel, new Rectangle(bounds.X + bounds.Width - border.Width, bounds.Y, border.Width, bounds.Height), border.Color);
-
-				// Bottom border
-				spriteBatch.Draw(Assets.Pixel, new Rectangle(bounds.X, bounds.Y + bounds.Height - border.Width, bounds.Width, border.Width), border.Color);
-
-				// Left border
-				spriteBatch.Draw(Assets.Pixel, new Rectangle(bounds.X, bounds.Y, border.Width, bounds.Height), border.Color);
 			}
 
 			Background background = this.Background;
@@ -106,26 +87,39 @@
 				spriteBatch.Draw(Assets.Pixel, this.GetInnerBounds(), background.Color);
 			}
 
-			Vector2 fontPosition = new Vector2
+			var a = this.TextPtr.GetAbsolutePosition(this);
+
+			Point stringPosition = this.GetInnerBounds().Location;
+			stringPosition.X += (int)this.Padding.X;
+			stringPosition.Y += (int)this.Padding.Y;
+
+			Vector2 textPtrPosition = new Vector2
 			{
-				X = this.Location.X + this.Padding.X,
-				Y = this.Location.Y + this.Padding.Y
+				X = stringPosition.X,
+				Y = stringPosition.Y
 			};
 
-			Vector2 ptrpos = this.TextPtr.GetAbsolutePosition(this); // TODO
-
-			//using (Scope.UseValue(() => spriteBatch.GraphicsDevice.RasterizerState, Assets.Scissors))
+			if (this.TextPtr.TextOffset == 0)
 			{
-				//using (Scope.UseValue(() => spriteBatch.GraphicsDevice.ScissorRectangle, Rectangle.Intersect(this.GetInnerBounds(), spriteBatch.GraphicsDevice.ScissorRectangle)))
+				textPtrPosition.X += this.TextSize.X;
+			}
+			else
+			{
+				textPtrPosition.X += this.Font.MeasureString(this.Text.Substring(0, this.Text.Length - (int)this.TextPtr.TextOffset)).X; // TODO to optimizate
+			}
+
+			using (Scope.UseValue(() => spriteBatch.GraphicsDevice.RasterizerState, Assets.Scissors))
+			{
+				using (Scope.UseValue(() => spriteBatch.GraphicsDevice.ScissorRectangle, Rectangle.Intersect(this.GetInnerBounds(), spriteBatch.GraphicsDevice.ScissorRectangle)))
 				{
 					spriteBatch.Draw(Assets.TextPtr,
-								new Rectangle((int)ptrpos.X,
-										(int)ptrpos.Y,
+								new Rectangle((int)textPtrPosition.X,
+										(int)textPtrPosition.Y,
 										this.TextPtr.Width,
 										this.TextPtr.Height),
 								Color.White);
 
-					spriteBatch.DrawString(Font, this.Text, fontPosition, Color.Black);
+					spriteBatch.DrawString(Font, this.Text, new Vector2(stringPosition.X, stringPosition.Y), Color.Black);
 				}
 			}
 		}
@@ -238,10 +232,13 @@
 			{
 				this.OnMouseUp(EventArgs.Empty);
 			}
+
 			#endregion focusUpdate
 
 			if (this.IsFocused)
 			{
+				#region ifFocused
+
 				KeyboardState state = Keyboard.GetState();
 
 				foreach (Keys key in keys)
@@ -296,7 +293,10 @@
 					}
 				}
 
+				#endregion ifFocused
+
 				this.previousKeyboardState = state;
+				RecalcPadding();
 			}
 		}
 
