@@ -67,7 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Algorithms.Extensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\snowinmars.Extensions.1.0.1\lib\Algorithms.Extensions.dll</HintPath>
+      <HintPath>..\packages\snowinmars.Extensions.1.0.2\lib\Algorithms.Extensions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MonoGame.Framework">
