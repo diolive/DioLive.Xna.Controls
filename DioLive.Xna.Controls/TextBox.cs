@@ -44,7 +44,6 @@
 			this.Padding = padding;
 			this.TextPtr = new TextBoxPtr();
 
-			this.Textures = new Dictionary<VisibleState, Texture2D>();
 		}
 
 		public SpriteFont Font { get; set; }
@@ -71,15 +70,6 @@
 			}
 		}
 
-		public void SetTextures(Dictionary<VisibleState, Texture2D> textures)
-		{
-			this.Textures = textures;
-		}
-
-		/// <summary>
-		/// Init it with MonogameStock dictionaries, using SetTextures() method
-		/// </summary>
-		public Dictionary<VisibleState, Texture2D> Textures { get; private set; }
 
 		public override void Draw(SpriteBatch spriteBatch)
 		{
@@ -104,11 +94,6 @@
 
 				// Left border
 				spriteBatch.Draw(Assets.Pixel, new Rectangle(bounds.X, bounds.Y, border.Width, bounds.Height), border.Color);
-			}
-
-			if (this.Textures.Count > 0)
-			{
-				spriteBatch.Draw(this.Textures[currentVisibleState], this.GetBounds(), Color.White);
 			}
 
 			Background background = this.Background;
