@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DioLive.Xna.Controls", "DioLive.Xna.Controls\DioLive.Xna.Controls.csproj", "{D513493A-579F-413D-B48B-E24A6AE312A8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DioLive.Helpers.Properties", "DioLive.Helpers.Properties\DioLive.Helpers.Properties.csproj", "{B1168AD3-F2D4-4BE4-B9E9-AEB3F938C739}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DioLive.Xna.Interfaces", "DioLive.Xna.Interfaces\DioLive.Xna.Interfaces.csproj", "{EBFB878C-49D8-4D72-87D5-07EDCF42A2BA}"
 EndProject
 Global
@@ -17,6 +18,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D513493A-579F-413D-B48B-E24A6AE312A8}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{D513493A-579F-413D-B48B-E24A6AE312A8}.Debug|Any CPU.Build.0 = Debug|x86
 		{D513493A-579F-413D-B48B-E24A6AE312A8}.Debug|x86.ActiveCfg = Debug|x86
 		{D513493A-579F-413D-B48B-E24A6AE312A8}.Debug|x86.Build.0 = Debug|x86
 		{D513493A-579F-413D-B48B-E24A6AE312A8}.Release|Any CPU.ActiveCfg = Release|x86

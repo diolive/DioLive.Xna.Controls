@@ -61,10 +61,6 @@
     <Compile Include="UIElement\UIElement.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Algorithms.Extensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\snowinmars.Extensions.1.0.2\lib\Algorithms.Extensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>
@@ -80,7 +76,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
     <ProjectReference Include="..\DioLive.Xna.Interfaces\DioLive.Xna.Interfaces.csproj">
       <Project>{EBFB878C-49D8-4D72-87D5-07EDCF42A2BA}</Project>
       <Name>DioLive.Xna.Interfaces</Name>
