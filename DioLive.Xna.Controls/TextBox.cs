@@ -8,6 +8,8 @@ namespace DioLive.Xna.Controls
 {
     public class TextBox : FocusUIElement, IHasFocus
     {
+        private static readonly SpriteFont DefaultFont = Assets.PTSans14;
+
         #region Fields
 
         private string text;
@@ -31,10 +33,10 @@ namespace DioLive.Xna.Controls
                 text = string.Empty;
             }
 
-            this.Font = Assets.PTSans14;
+            this.Font = DefaultFont;
             this.Text = text;
 
-            this.TextPtr = new TextBoxPtr();
+            this.TextPtr = new TextBoxPtr(new Point(1, (int)Font.MeasureString("W").Y)); // W is usual letter in font
         }
 
         #endregion Constructors
@@ -121,11 +123,8 @@ namespace DioLive.Xna.Controls
             {
                 using (Scope.UseValue(() => spriteBatch.GraphicsDevice.ScissorRectangle, Rectangle.Intersect(this.GetInnerBounds(), spriteBatch.GraphicsDevice.ScissorRectangle)))
                 {
-                    spriteBatch.Draw(Assets.TextPtr,
-                                        new Rectangle((int)textPtrPosition.X,
-                                                        (int)textPtrPosition.Y,
-                                                        this.TextPtr.X,
-                                                        this.TextPtr.Y),
+                    spriteBatch.Draw(Assets.GetTextPtrTexture(this.TextPtr.Size),
+                                        new Rectangle(textPtrPosition.ToPoint(), this.TextPtr.Size),
                                         Color.White);
 
                     spriteBatch.DrawString(Font, this.Text, stringPosition, Color.Black);
@@ -156,40 +155,40 @@ namespace DioLive.Xna.Controls
                         {
                             case Keys.Left:
                                 {
-                                    if (this.TextPtr.TextOffset < this.Text.Length)
+                                    if (this.TextPtr.Offset < this.Text.Length)
                                     {
-                                        this.TextPtr.TextOffset++;
+                                        this.TextPtr.Offset++;
                                     }
                                     continue;
                                 }
 
                             case Keys.Right:
                                 {
-                                    if (this.TextPtr.TextOffset > 0)
+                                    if (this.TextPtr.Offset > 0)
                                     {
-                                        this.TextPtr.TextOffset--;
+                                        this.TextPtr.Offset--;
                                     }
                                     continue;
                                 }
 
                             case Keys.Home:
                                 {
-                                    this.TextPtr.TextOffset = (uint)this.Text.Length;
+                                    this.TextPtr.Offset = (uint)this.Text.Length;
                                     continue;
                                 }
 
                             case Keys.End:
                                 {
-                                    this.TextPtr.TextOffset = 0;
+                                    this.TextPtr.Offset = 0;
                                     continue;
                                 }
 
                             case Keys.Back:
                                 {
                                     if ((this.Text.Length > 0) &&
-                                        (this.TextPtr.TextOffset != this.Text.Length))
+                                        (this.TextPtr.Offset != this.Text.Length))
                                     {
-                                        this.Text = this.Text.Remove(this.Text.Length - 1 - (int)this.TextPtr.TextOffset, 1); // string is only type, that can converts to string quickly
+                                        this.Text = this.Text.Remove(this.Text.Length - 1 - (int)this.TextPtr.Offset, 1); // string is only type, that can converts to string quickly
                                     }
                                     continue;
                                 }
@@ -200,14 +199,14 @@ namespace DioLive.Xna.Controls
                                             state.IsKeyDown(Keys.RightShift)) ^
                                             System.Windows.Forms.Control.IsKeyLocked(System.Windows.Forms.Keys.CapsLock); // TODO to ask about ref
 
-                        if (this.TextPtr.TextOffset == 0)
+                        if (this.TextPtr.Offset == 0)
                         {
                             this.Text += this.Map(key, isUppercase); // string is only type, that can converts to string quickly
                         }
                         else
                         {
                             string newStr = this.Map(key, isUppercase);
-                            this.Text = this.Text.Insert(this.Text.Length - (int)this.TextPtr.TextOffset, newStr); // TODO bullshit, rewrite
+                            this.Text = this.Text.Insert(this.Text.Length - (int)this.TextPtr.Offset, newStr); // TODO bullshit, rewrite
                         }
                     }
                 }
@@ -233,7 +232,7 @@ namespace DioLive.Xna.Controls
         {
             this.textPtrPosition = stringPosition;
 
-            if (this.TextPtr.TextOffset == 0)
+            if (this.TextPtr.Offset == 0)
             {
                 this.textPtrPosition.X += this.TextSize.X;
             }
@@ -241,7 +240,7 @@ namespace DioLive.Xna.Controls
             {
                 this.textPtrPosition.X += this.Font
                                                 .MeasureString(this.Text
-                                                                    .Substring(0, this.Text.Length - (int)this.TextPtr.TextOffset))
+                                                                    .Substring(0, this.Text.Length - (int)this.TextPtr.Offset))
                                                 .X; // TODO optimizate
             }
         }

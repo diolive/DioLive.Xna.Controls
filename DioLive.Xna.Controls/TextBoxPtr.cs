@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace DioLive.Xna.Controls
 {
@@ -6,22 +7,23 @@ namespace DioLive.Xna.Controls
     {
         private Point size;
 
-
-        internal TextBoxPtr() : this(Color.Black, 0)
+        internal TextBoxPtr(Point size) : this(size, Color.Black, 0)
         {
         }
 
-        internal TextBoxPtr(Color color, uint textOffset)
+        internal TextBoxPtr(Point size, Color color, uint textOffset)
         {
             this.Color = color;
-            this.TextOffset = textOffset;
-            this.Size = new Point(1, 30);
+            this.Offset = textOffset;
+            this.Size = size; // TODO
         }
 
         internal Color Color { get; set; }
 
-        internal uint TextOffset { get; set; }
+        internal uint Offset { get; set; }
 
+        // this suppressed due to X and Y props
+#pragma warning disable CC0017 // Use auto property
         internal Point Size
         {
             get
@@ -33,6 +35,7 @@ namespace DioLive.Xna.Controls
                 this.size = value;
             }
         }
+#pragma warning restore CC0017 // Use auto property
 
         internal int Y
         {

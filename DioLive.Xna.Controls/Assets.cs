@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 using DioLive.Xna.Controls.Helpers;
+using System.Collections.Generic;
 
 namespace DioLive.Xna.Controls
 {
@@ -12,7 +13,7 @@ namespace DioLive.Xna.Controls
     {
         public static Texture2D Pixel { get; private set; }
 
-        public static Texture2D TextPtr { get; private set; }
+        //public static Texture2D TextPtr { get; private set; }
 
         public static SpriteFont PTSans8 { get; private set; }
 
@@ -42,7 +43,7 @@ namespace DioLive.Xna.Controls
             }
 
             Assets.Pixel = Texture2DHelper.Generate(gfx, 1, 1, Color.White);
-            Assets.TextPtr = Texture2DHelper.Generate(gfx, 1, 10, Color.Black);
+            //Assets.TextPtr = Texture2DHelper.Generate(gfx, 1, 10, Color.Black);
             Assets.PTSans8 = content.Load<SpriteFont>("fonts/PTSans8");
             Assets.PTSans10 = content.Load<SpriteFont>("fonts/PTSans10");
             Assets.PTSans12 = content.Load<SpriteFont>("fonts/PTSans12");
@@ -53,13 +54,42 @@ namespace DioLive.Xna.Controls
             Assets.PTSans36 = content.Load<SpriteFont>("fonts/PTSans36");
             Assets.PTSans48 = content.Load<SpriteFont>("fonts/PTSans48");
             Assets.Scissors = new RasterizerState { ScissorTestEnable = true };
+
+            Assets.dict = new Dictionary<Point, Texture2D> (16);
+            Assets.graphicsDevice = gfx;
         }
 
         public static void Unload()
         {
             Assets.Pixel.Dispose();
-            Assets.TextPtr.Dispose();
             Assets.Scissors.Dispose();
+
+            foreach (var item in dict)
+            {
+                item.Value.Dispose();
+            }
+        }
+
+        private static Dictionary<Point, Texture2D> dict;
+        private static GraphicsDevice graphicsDevice;
+
+        public static Texture2D GetTextPtrTexture(Point size)
+            => Assets.GetTextPtrTexture(size, Color.Black);
+
+        public static Texture2D GetTextPtrTexture(Point size, Color color)
+        {
+            Texture2D texture = null;
+
+            if (Assets.dict.TryGetValue(size, out texture))
+            {
+                return texture;
+            }
+            else
+            {
+                texture = Texture2DHelper.Generate(graphicsDevice, size.X, size.Y, color);
+                Assets.dict[size] = texture;
+                return texture;
+            }
         }
     }
 }
