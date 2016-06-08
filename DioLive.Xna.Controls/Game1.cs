@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -45,7 +45,7 @@ namespace DioLive.Xna.Controls
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            Assets.Load(this.Content);
+            Assets.Load(this.Content, this.GraphicsDevice);
             this.container = new Container(RelativeLayout.GetBuilder())
             {
                 Location = new Vector2(50, 50),
@@ -63,6 +63,15 @@ namespace DioLive.Xna.Controls
             };
 
             this.container.AddElement(label);
+
+            TextBox textBox = new TextBox(string.Empty)
+            {
+                Location = new Vector2(100, 100),
+                Size = new Vector2(200, 50),
+                Background = Color.Red,
+            };
+
+            this.container.AddElement(textBox);
         }
 
         /// <summary>
@@ -85,6 +94,7 @@ namespace DioLive.Xna.Controls
                 Exit();
 
             // TODO: Add your update logic here
+            this.container.Update(gameTime);
 
             base.Update(gameTime);
         }
