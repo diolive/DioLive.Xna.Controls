@@ -1,10 +1,8 @@
-﻿using System;
-
+﻿using DioLive.Xna.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
-using DioLive.Xna.Interfaces;
+using System;
 
 namespace DioLive.Xna.Controls
 {
@@ -15,6 +13,7 @@ namespace DioLive.Xna.Controls
         private string text;
         private Vector2 stringPosition;
         private Vector2 textPtrPosition;
+        private SpriteFont font;
 
         #endregion Fields
 
@@ -36,22 +35,38 @@ namespace DioLive.Xna.Controls
             this.Text = text;
 
             this.TextPtr = new TextBoxPtr();
-            this.TextSize = Font.MeasureString(this.Text);
         }
 
         #endregion Constructors
 
         #region Properties
 
-        public SpriteFont Font { get; set; }
+        /// <summary>
+        /// Updating of this property will recalculate property this.TextSize
+        /// </summary>
+        public SpriteFont Font
+        {
+            get
+            {
+                return this.font;
+            }
+            set
+            {
+                this.font = value;
+
+                if (this.text != null)
+                {
+                    this.TextSize = Font.MeasureString(this.Text);
+                }
+            }
+        }
 
         /// <summary>
-        /// Well, padding is almost working
+        /// Well, padding is almost workable
         /// </summary>
         public Vector2 Padding { get; set; }
 
         /// <summary>
-        /// Text inside the element.
         /// Updating of this property will recalculate property this.TextSize
         /// </summary>
         public string Text // string is only type, that can converts to string quickly
@@ -77,7 +92,7 @@ namespace DioLive.Xna.Controls
         internal TextBoxPtr TextPtr { get; private set; }
 
         /// <summary>
-        /// This property autoupdates when this.Text is changing.
+        /// This property autoupdates when this.Text or this.Font is changing.
         /// </summary>
         internal Vector2 TextSize { get; set; }
 
@@ -109,11 +124,11 @@ namespace DioLive.Xna.Controls
                     spriteBatch.Draw(Assets.TextPtr,
                                         new Rectangle((int)textPtrPosition.X,
                                                         (int)textPtrPosition.Y,
-                                                        this.TextPtr.Width,
-                                                        this.TextPtr.Height),
+                                                        this.TextPtr.X,
+                                                        this.TextPtr.Y),
                                         Color.White);
 
-                    spriteBatch.DrawString(Font, this.Text, new Vector2(stringPosition.X, stringPosition.Y), Color.Black);
+                    spriteBatch.DrawString(Font, this.Text, stringPosition, Color.Black);
                 }
             }
         }
@@ -186,7 +201,7 @@ namespace DioLive.Xna.Controls
                 }
 
                 this.previousKeyboardState = state;
-                RecalcPadding();
+                RecalcAll();
             }
         }
 
@@ -194,40 +209,17 @@ namespace DioLive.Xna.Controls
 
         #region Private methods
 
-        // TODO: split to three methods
-        private void RecalcPadding()
+        private void RecalcAll()
         {
-            Vector2 fontSize = Font.MeasureString(this.Text);
+            // exact in this order
+            RecalcPadding();
+            RecalcStringPosition();
+            RecalcTextPointerPosition();
+        }
 
-            // padding
-            // TODO fix padding's magic numbers
-            this.Padding = new Vector2
-            {
-                X = Math.Abs((this.Size.X - fontSize.X) / 2),
-
-                Y = Math.Abs((this.Size.Y - fontSize.Y) / 4),
-            };
-
-            // string position
-
-            Point location = this.GetInnerBounds().Location;
-            this.stringPosition = new Vector2(location.X, location.Y);
-            this.stringPosition.X += (int)this.Padding.X;
-            this.stringPosition.Y += (int)this.Padding.Y;
-
-            if (this.TextSize.X > this.Size.X)
-            {
-                this.stringPosition.X -= (int)(this.TextSize.X - this.Size.X);
-                this.stringPosition.X -= (int)this.Padding.X + 5;
-            }
-
-            // text pointer position
-
-            this.textPtrPosition = new Vector2
-            {
-                X = stringPosition.X,
-                Y = stringPosition.Y,
-            };
+        private void RecalcTextPointerPosition()
+        {
+            this.textPtrPosition = stringPosition;
 
             if (this.TextPtr.TextOffset == 0)
             {
@@ -236,10 +228,37 @@ namespace DioLive.Xna.Controls
             else
             {
                 this.textPtrPosition.X += this.Font
-                            .MeasureString(this.Text
-                                                .Substring(0, this.Text.Length - (int)this.TextPtr.TextOffset))
-                            .X; // TODO optimizate
+                                                .MeasureString(this.Text
+                                                                    .Substring(0, this.Text.Length - (int)this.TextPtr.TextOffset))
+                                                .X; // TODO optimizate
             }
+        }
+
+        private void RecalcStringPosition()
+        {
+            Point location = this.GetInnerBounds().Location;
+            this.stringPosition = location.ToVector2();
+            this.stringPosition.X += this.Padding.X;
+            this.stringPosition.Y += this.Padding.Y;
+
+            if (this.TextSize.X > this.Size.X)
+            {
+                this.stringPosition.X -= (this.TextSize.X - this.Size.X);
+                this.stringPosition.X -= this.Padding.X + 5;
+            }
+        }
+
+        private void RecalcPadding()
+        {
+            Vector2 fontSize = Font.MeasureString(this.Text);
+
+            // TODO fix padding's magic numbers
+            this.Padding = new Vector2
+            {
+                X = Math.Abs((this.Size.X - fontSize.X) / 2),
+
+                Y = Math.Abs((this.Size.Y - fontSize.Y) / 4),
+            };
         }
 
         #endregion Private methods
@@ -278,21 +297,21 @@ namespace DioLive.Xna.Controls
                             Keys.M,
 
                             ////////////////////////// controls
-                            Keys.Back,		// backspace
-                            Keys.Space,		// space
-                            Keys.OemQuestion,	// ?
-                            Keys.OemPeriod,		// .
-                            Keys.OemComma,		// ,
-                            Keys.OemSemicolon,	// ;
-                            Keys.OemQuotes,		// '
-                            Keys.OemPipe,		// \
+                            Keys.Back,		        // backspace
+                            Keys.Space,		        // space
+                            Keys.OemQuestion,	    // ?
+                            Keys.OemPeriod,		    // .
+                            Keys.OemComma,		    // ,
+                            Keys.OemSemicolon,	    // ;
+                            Keys.OemQuotes,		    // '
+                            Keys.OemPipe,		    // \
                             Keys.OemOpenBrackets,	// [
                             Keys.OemCloseBrackets,	// ]
-                            Keys.OemMinus,		// -
-                            Keys.OemPlus,		// =
-                            Keys.OemTilde,		// `
-                            Keys.Left,		// left arrow
-                            Keys.Right,		// right arrow
+                            Keys.OemMinus,		    // -
+                            Keys.OemPlus,		    // =
+                            Keys.OemTilde,		    // `
+                            Keys.Left,		        // left arrow
+                            Keys.Right,		        // right arrow
                             //////////////////////////
 
                             /////////// arabic numbers
@@ -308,8 +327,6 @@ namespace DioLive.Xna.Controls
                             Keys.D9, //
                             ///////////
                         };
-
-        //private Vector2 textSize;
 
         #endregion allowedkeys
 
