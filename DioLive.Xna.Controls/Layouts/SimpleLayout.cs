@@ -13,6 +13,8 @@ namespace DioLive.Xna.Controls.Layouts
             this.container = container;
         }
 
+        public static LayoutBuilder GetBuilder() => (c) => new SimpleLayout(c);
+
         public Rectangle GetBounds(UIElement element)
         {
             if (!this.container.Elements.Contains(element))
@@ -26,7 +28,5 @@ namespace DioLive.Xna.Controls.Layouts
         void ILayout.Invalidate()
         {
         }
-
-        public static LayoutBuilder GetBuilder() => (c) => new SimpleLayout(c);
     }
 }

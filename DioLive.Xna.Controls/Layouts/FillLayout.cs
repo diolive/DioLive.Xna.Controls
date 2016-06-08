@@ -19,6 +19,8 @@ namespace DioLive.Xna.Controls.Layouts
             this.bounds = new Dictionary<UIElement, Rectangle>();
         }
 
+        public static LayoutBuilder GetBuilder(Direction direction = Direction.Horizontal) => (c) => new FillLayout(c, direction);
+
         public Rectangle GetBounds(UIElement element)
         {
             if (!this.container.Elements.Contains(element))
@@ -87,8 +89,6 @@ namespace DioLive.Xna.Controls.Layouts
                 shift += elementHeight;
             }
         }
-
-        public static LayoutBuilder GetBuilder(Direction direction = Direction.Horizontal) => (c) => new FillLayout(c, direction);
 
         public enum Direction : byte
         {

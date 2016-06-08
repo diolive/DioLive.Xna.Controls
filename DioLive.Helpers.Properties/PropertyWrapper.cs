@@ -14,6 +14,14 @@ namespace DioLive.Helpers.Properties
             this.Target = target;
         }
 
+        public string Name { get; }
+
+        public Func<object, object> Getter { get; }
+
+        public Action<object, object> Setter { get; }
+
+        public object Target { get; }
+
         public static PropertyWrapper Wrap<T>(Expression<Func<T>> property)
         {
             MemberExpression memberExpr = property.Body as MemberExpression;
@@ -52,14 +60,6 @@ namespace DioLive.Helpers.Properties
 
             return new PropertyWrapper(name, getter, setter, target);
         }
-
-        public string Name { get; }
-
-        public Func<object, object> Getter { get; }
-
-        public Action<object, object> Setter { get; }
-
-        public object Target { get; }
 
         public object GetValue() => this.Getter(this.Target);
 
