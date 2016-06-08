@@ -36,7 +36,7 @@ namespace DioLive.Xna.Controls
             this.Font = DefaultFont;
             this.Text = text;
 
-            this.TextPtr = new TextBoxPtr(new Point(1, (int)Font.MeasureString("W").Y)); // W is usual letter in font
+            this.TextPtr = new TextBoxPtr(new Point(1, (int)Font.MeasureString("W").Y)); // 'W' is usual letter in font
         }
 
         #endregion Constructors
@@ -145,12 +145,13 @@ namespace DioLive.Xna.Controls
             {
                 KeyboardState state = Keyboard.GetState();
 
-                foreach (Keys key in allowedKeys)
+                foreach (Keys key in TextBox.allowedKeys)
                 {
                     // TODO how to do KeyRelease in another way? Have to?..
                     if (state.IsKeyUp(key) &&
                         (this.previousKeyboardState.IsKeyDown(key)))
                     {
+                        // if you wanna add new case block here, ensure, that you added new key value to TextBox.allowedKeys array
                         switch (key)
                         {
                             case Keys.Left:
@@ -201,7 +202,13 @@ namespace DioLive.Xna.Controls
 
                         if (this.TextPtr.Offset == 0)
                         {
-                            this.Text += this.Map(key, isUppercase); // string is only type, that can converts to string quickly
+                            string output = this.Map(key, isUppercase);
+
+                            // if this keymap exists
+                            if (output != null)
+                            {
+                                this.Text += output; // string is only type, that can converts to string quickly
+                            }
                         }
                         else
                         {
@@ -278,7 +285,7 @@ namespace DioLive.Xna.Controls
 
         #region allowedkeys
 
-        private readonly Keys[] allowedKeys = new Keys[]
+        private static readonly Keys[] allowedKeys = new Keys[]
                         {
                             Keys.Q,
                             Keys.W,
@@ -602,6 +609,7 @@ namespace DioLive.Xna.Controls
                     #endregion letters
 
                     default:
+                        output = null;
                         break;
                 }
 
@@ -862,6 +870,7 @@ namespace DioLive.Xna.Controls
                     #endregion letters
 
                     default:
+                        output = null;
                         break;
                 }
 
