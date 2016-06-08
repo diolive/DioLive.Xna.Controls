@@ -6,7 +6,7 @@ namespace DioLive.Xna.Controls.Layouts
 {
     public class SimpleLayout : ILayout
     {
-        private Container container;
+        private readonly Container container;
 
         public SimpleLayout(Container container)
         {

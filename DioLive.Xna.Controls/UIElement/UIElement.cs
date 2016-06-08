@@ -221,7 +221,8 @@ namespace DioLive.Xna.Controls
             Rectangle bounds = this.GetBounds();
             Border border = this.Border;
 
-            if (border != null && border.Width > 0)
+            if (border != null &&
+                    border.Width > 0)
             {
                 bounds.Inflate(-border.Width, -border.Width);
             }

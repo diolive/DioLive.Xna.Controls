@@ -8,9 +8,9 @@ namespace DioLive.Xna.Controls.Layouts
 {
     public class FillLayout : ILayout
     {
-        private Container container;
-        private Direction direction;
-        private Dictionary<UIElement, Rectangle> bounds;
+        private readonly Container container;
+        private readonly Direction direction;
+        private readonly Dictionary<UIElement, Rectangle> bounds;
 
         public FillLayout(Container container, Direction direction = Direction.Horizontal)
         {
@@ -52,19 +52,18 @@ namespace DioLive.Xna.Controls.Layouts
         {
             this.bounds.Clear();
 
-            Rectangle bounds = this.container.GetInnerBounds();
+            Rectangle innerBounds = this.container.GetInnerBounds();
             UIElement[] elements = this.container.Elements.OrderBy(e => e.X).ToArray();
             float totalWidth = elements.Sum(e => e.Width);
             float shift = 0;
 
             foreach (var element in elements)
             {
-                float elementWidth = element.Width / totalWidth * bounds.Width;
-                this.bounds[element] = new Rectangle(
-                    bounds.Left + (int)Math.Round(shift),
-                    bounds.Top,
-                    (int)Math.Round(elementWidth),
-                    bounds.Height);
+                float elementWidth = element.Width / totalWidth * innerBounds.Width;
+                this.bounds[element] = new Rectangle(innerBounds.Left + (int)Math.Round(shift),
+                                                        innerBounds.Top,
+                                                        (int)Math.Round(elementWidth),
+                                                        innerBounds.Height);
                 shift += elementWidth;
             }
         }
@@ -73,18 +72,18 @@ namespace DioLive.Xna.Controls.Layouts
         {
             this.bounds.Clear();
 
-            Rectangle bounds = this.container.GetInnerBounds();
+            Rectangle innerBounds = this.container.GetInnerBounds();
             UIElement[] elements = this.container.Elements.OrderBy(e => e.Y).ToArray();
             float totalHeight = elements.Sum(e => e.Height);
             float shift = 0;
 
             foreach (var element in elements)
             {
-                float elementHeight = element.Height / totalHeight * bounds.Height;
+                float elementHeight = element.Height / totalHeight * innerBounds.Height;
                 this.bounds[element] = new Rectangle(
-                    bounds.Left,
-                    bounds.Top + (int)Math.Round(shift),
-                    bounds.Width,
+                    innerBounds.Left,
+                    innerBounds.Top + (int)Math.Round(shift),
+                    innerBounds.Width,
                     (int)Math.Round(elementHeight));
                 shift += elementHeight;
             }

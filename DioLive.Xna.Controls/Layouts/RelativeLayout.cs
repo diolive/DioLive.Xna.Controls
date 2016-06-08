@@ -6,7 +6,7 @@ namespace DioLive.Xna.Controls.Layouts
 {
     public class RelativeLayout : ILayout
     {
-        private Container container;
+        private readonly Container container;
 
         public RelativeLayout(Container container)
         {

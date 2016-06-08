@@ -7,7 +7,7 @@ namespace DioLive.Xna.Controls
 {
     public class Scope : IDisposable
     {
-        private Action restore;
+        private readonly Action restore;
 
         private Scope(Action restore)
         {
