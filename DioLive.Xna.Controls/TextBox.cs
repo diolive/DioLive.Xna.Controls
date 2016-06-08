@@ -8,14 +8,7 @@ using DioLive.Xna.Interfaces;
 
 namespace DioLive.Xna.Controls
 {
-    public enum VisibleState
-    {
-        Normal = 0,
-        Pressed = 1,
-        Hover = 2,
-    }
-
-    public class TextBox : UIElement, IHasFocus
+    public class TextBox : FocusUIElement, IHasFocus
     {
         #region Fields
 
@@ -33,12 +26,7 @@ namespace DioLive.Xna.Controls
         }
 
         public TextBox(string text)
-            : base()
         {
-            // I don't want to bounding to source order in ctor
-            this.LocationChanged += (s, e) => this.RecalcPadding();
-            this.SizeChanged += (s, e) => this.RecalcPadding();
-
             if (text == null)
             {
                 text = string.Empty;
@@ -51,49 +39,8 @@ namespace DioLive.Xna.Controls
         }
 
         #endregion Constructors
-
-        #region Events
-
-        public event EventHandler MouseClick;
-
-        public event EventHandler MouseDown;
-
-        public event EventHandler MouseOut;
-
-        public event EventHandler MouseUnclick;
-
-        public event EventHandler MouseUp;
-
-        protected virtual void OnMouseClick(EventArgs e)
-        {
-            this.MouseClick?.Invoke(this, e);
-        }
-
-        protected virtual void OnMouseDown(EventArgs e)
-        {
-            this.MouseDown?.Invoke(this, e);
-        }
-
-        protected virtual void OnMouseOut(EventArgs e)
-        {
-            this.MouseOut?.Invoke(this, e);
-        }
-
-        protected virtual void OnMouseUnclick(EventArgs e)
-        {
-            this.MouseUnclick?.Invoke(this, e);
-        }
-
-        protected virtual void OnMouseUp(EventArgs e)
-        {
-            this.MouseUp?.Invoke(this, e);
-        }
-
-        #endregion Events
-
+     
         #region Properties
-
-        public bool IsFocused { get; set; }
 
         public SpriteFont Font { get; set; }
 
@@ -157,6 +104,8 @@ namespace DioLive.Xna.Controls
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            base.Draw(spriteBatch);
+
             if (spriteBatch == null)
             {
                 throw new ArgumentNullException(nameof(spriteBatch));
@@ -192,71 +141,12 @@ namespace DioLive.Xna.Controls
 
         public override void Update(GameTime gameTime)
         {
+            base.Update(gameTime);
+
             // this region has to move to update helper or smth, due to this will be common method for all IHasFocus, I think
-            #region focusUpdate
-
-            this.previousVisibleState = this.currentVisibleState;
-            this.previousMouseState = this.currentMouseState;
-
-            this.currentMouseState = Mouse.GetState();
-
-            if (this.GetBounds().Contains(this.currentMouseState.X, this.currentMouseState.Y))
-            {
-                if (this.currentMouseState.LeftButton == ButtonState.Pressed)
-                {
-                    if (this.previousMouseState.LeftButton == ButtonState.Released)
-                    {
-                        this.currentVisibleState = VisibleState.Pressed;
-                        this.IsFocused = true;
-                        this.OnMouseDown(EventArgs.Empty);
-                    }
-                    else
-                    {
-                        if (this.currentVisibleState != VisibleState.Pressed)
-                        {
-                            this.currentVisibleState = VisibleState.Hover;
-                        }
-                    }
-                }
-                else
-                {
-                    if (this.previousVisibleState == VisibleState.Pressed)
-                    {
-                        this.OnMouseClick(EventArgs.Empty);
-                    }
-
-                    this.currentVisibleState = VisibleState.Hover;
-                }
-            }
-            else
-            {
-                if (this.previousVisibleState == VisibleState.Hover ||
-                    this.previousVisibleState == VisibleState.Pressed)
-                {
-                    this.OnMouseOut(EventArgs.Empty);
-                }
-
-                if (this.currentMouseState.LeftButton == ButtonState.Pressed)
-                {
-                    this.IsFocused = false;
-                    this.OnMouseUnclick(EventArgs.Empty);
-                }
-
-                this.currentVisibleState = VisibleState.Normal;
-            }
-
-            if (this.currentMouseState.LeftButton == ButtonState.Released &&
-                this.previousVisibleState == VisibleState.Pressed)
-            {
-                this.OnMouseUp(EventArgs.Empty);
-            }
-
-            #endregion focusUpdate
 
             if (this.IsFocused)
             {
-                #region keyMap
-
                 KeyboardState state = Keyboard.GetState();
 
                 foreach (Keys key in keys)
@@ -297,8 +187,8 @@ namespace DioLive.Xna.Controls
 
                         // TODO bug: Caps + '1' == '!', but has to be '1'
                         bool isUppercase = (state.IsKeyDown(Keys.LeftShift) ||
-                                    state.IsKeyDown(Keys.RightShift)) ^
-                                    System.Windows.Forms.Control.IsKeyLocked(System.Windows.Forms.Keys.CapsLock); // TODO to ask about ref
+                                            state.IsKeyDown(Keys.RightShift)) ^
+                                            System.Windows.Forms.Control.IsKeyLocked(System.Windows.Forms.Keys.CapsLock); // TODO to ask about ref
 
                         if (this.TextPtr.TextOffset == 0)
                         {
@@ -312,24 +202,12 @@ namespace DioLive.Xna.Controls
                     }
                 }
 
-                #endregion keyMap
-
                 this.previousKeyboardState = state;
                 RecalcPadding();
             }
         }
 
         #endregion Public methods
-
-        #region states
-
-        protected MouseState currentMouseState;
-        protected VisibleState currentVisibleState = VisibleState.Normal;
-        protected KeyboardState previousKeyboardState;
-        protected MouseState previousMouseState;
-        protected VisibleState previousVisibleState = VisibleState.Normal;
-
-        #endregion states
 
         #region Private methods
 

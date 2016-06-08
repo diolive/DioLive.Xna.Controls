@@ -43,6 +43,7 @@
     <Compile Include="Border.cs" />
     <Compile Include="Background.cs" />
     <Compile Include="Container.cs" />
+    <Compile Include="UIElement\FocusUIElement.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Label.cs" />
     <Compile Include="Layouts\ILayout.cs" />
@@ -57,7 +58,7 @@
     <Compile Include="Scope.cs" />
     <Compile Include="TextBox.cs" />
     <Compile Include="TextBoxPtr.cs" />
-    <Compile Include="UIElement.cs" />
+    <Compile Include="UIElement\UIElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Algorithms.Extensions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
