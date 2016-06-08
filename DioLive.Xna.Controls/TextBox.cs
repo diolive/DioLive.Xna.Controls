@@ -108,42 +108,6 @@ namespace DioLive.Xna.Controls
                 spriteBatch.Draw(Assets.Pixel, this.GetInnerBounds(), background.Color);
             }
 
-            var a = this.TextPtr.GetAbsolutePosition(this);
-
-            /////////
-
-            Point stringPosition = this.GetInnerBounds().Location;
-            stringPosition.X += (int)this.Padding.X;
-            stringPosition.Y += (int)this.Padding.Y;
-
-            if (this.TextSize.X > this.Size.X)
-            {
-                stringPosition.X -= (int)(this.TextSize.X - this.Size.X);
-                stringPosition.X -= (int)this.Padding.X + 5;
-            }
-
-            /////////
-
-            Vector2 textPtrPosition = new Vector2
-            {
-                X = stringPosition.X,
-                Y = stringPosition.Y,
-            };
-
-            if (this.TextPtr.TextOffset == 0)
-            {
-                textPtrPosition.X += this.TextSize.X;
-            }
-            else
-            {
-                textPtrPosition.X += this.Font
-                            .MeasureString(this.Text
-                                        .Substring(0, this.Text.Length - (int)this.TextPtr.TextOffset))
-                            .X; // TODO to optimizate
-            }
-
-            /////////
-
             using (Scope.UseValue(() => spriteBatch.GraphicsDevice.RasterizerState, Assets.Scissors))
             {
                 using (Scope.UseValue(() => spriteBatch.GraphicsDevice.ScissorRectangle, Rectangle.Intersect(this.GetInnerBounds(), spriteBatch.GraphicsDevice.ScissorRectangle)))
@@ -229,7 +193,7 @@ namespace DioLive.Xna.Controls
 
             if (this.IsFocused)
             {
-                #region ifFocused
+                #region keyMap
 
                 KeyboardState state = Keyboard.GetState();
 
@@ -285,7 +249,7 @@ namespace DioLive.Xna.Controls
                     }
                 }
 
-                #endregion ifFocused
+                #endregion keyMap
 
                 this.previousKeyboardState = state;
                 RecalcPadding();
@@ -302,19 +266,55 @@ namespace DioLive.Xna.Controls
 
         #endregion states
 
+        private Vector2 stringPosition;
+        private Vector2 textPtrPosition;
+
         private void RecalcPadding()
         {
             Vector2 fontSize = Font.MeasureString(this.Text);
 
+            // padding
+
             // TODO fix padding's magic numbers
-            Vector2 padding = new Vector2
+            this.Padding = new Vector2
             {
                 X = Math.Abs((this.Size.X - fontSize.X) / 2),
 
                 Y = Math.Abs((this.Size.Y - fontSize.Y) / 4),
             };
 
-            this.Padding = padding;
+            // string position
+
+            Point location = this.GetInnerBounds().Location;
+            this.stringPosition = new Vector2(location.X, location.Y);
+            this.stringPosition.X += (int)this.Padding.X;
+            this.stringPosition.Y += (int)this.Padding.Y;
+
+            if (this.TextSize.X > this.Size.X)
+            {
+                this.stringPosition.X -= (int)(this.TextSize.X - this.Size.X);
+                this.stringPosition.X -= (int)this.Padding.X + 5;
+            }
+
+            // text pointer position
+
+            this.textPtrPosition = new Vector2
+            {
+                X = stringPosition.X,
+                Y = stringPosition.Y,
+            };
+
+            if (this.TextPtr.TextOffset == 0)
+            {
+                this.textPtrPosition.X += this.TextSize.X;
+            }
+            else
+            {
+                this.textPtrPosition.X += this.Font
+                            .MeasureString(this.Text
+                                                .Substring(0, this.Text.Length - (int)this.TextPtr.TextOffset))
+                            .X; // TODO to optimizate
+            }
         }
 
         #region iHasFocus
