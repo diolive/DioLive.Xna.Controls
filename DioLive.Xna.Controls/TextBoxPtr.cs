@@ -23,27 +23,5 @@ namespace DioLive.Xna.Controls
         internal int Height { get; set; }
 
         internal int Width { get; set; }
-
-        internal Vector2 GetAbsolutePosition(TextBox textbox)
-        {
-            Vector2 result = new Vector2();
-
-            result.X += textbox.X;
-            result.Y += textbox.Y;
-
-            result.X += textbox.Padding.X;
-            result.Y += textbox.Padding.Y / 2; // TODO fix padding
-
-            if (this.TextOffset == 0)
-            {
-                result.X += textbox.TextSize.X;
-            }
-            else
-            {
-                result.X += textbox.Font.MeasureString(textbox.Text.Substring(0, textbox.Text.Length - (int)this.TextOffset)).X; // TODO to optimizate
-            }
-
-            return result;
-        }
     }
 }

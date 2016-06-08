@@ -124,6 +124,9 @@ namespace DioLive.Xna.Controls
             }
         }
 
+        /// <summary>
+        /// Text cursor position inside this text box
+        /// </summary>
         internal TextBoxPtr TextPtr { get; private set; }
 
         /// <summary>
@@ -165,16 +168,17 @@ namespace DioLive.Xna.Controls
                 spriteBatch.Draw(Assets.Pixel, this.GetInnerBounds(), background.Color);
             }
 
+            // here I emulate css's attribute overflow:hidden: all text outside this text box will be cutted
             using (Scope.UseValue(() => spriteBatch.GraphicsDevice.RasterizerState, Assets.Scissors))
             {
                 using (Scope.UseValue(() => spriteBatch.GraphicsDevice.ScissorRectangle, Rectangle.Intersect(this.GetInnerBounds(), spriteBatch.GraphicsDevice.ScissorRectangle)))
                 {
                     spriteBatch.Draw(Assets.TextPtr,
-                                new Rectangle((int)textPtrPosition.X,
-                                                (int)textPtrPosition.Y,
-                                                this.TextPtr.Width,
-                                                this.TextPtr.Height),
-                                Color.White);
+                                        new Rectangle((int)textPtrPosition.X,
+                                                        (int)textPtrPosition.Y,
+                                                        this.TextPtr.Width,
+                                                        this.TextPtr.Height),
+                                        Color.White);
 
                     spriteBatch.DrawString(Font, this.Text, new Vector2(stringPosition.X, stringPosition.Y), Color.Black);
                 }
@@ -188,6 +192,7 @@ namespace DioLive.Xna.Controls
 
         public override void Update(GameTime gameTime)
         {
+            // this region has to move to update helper or smth, due to this will be common method for all IHasFocus, I think
             #region focusUpdate
 
             this.previousVisibleState = this.currentVisibleState;
@@ -262,30 +267,31 @@ namespace DioLive.Xna.Controls
                         switch (key)
                         {
                             case Keys.Left:
-                                if (this.TextPtr.TextOffset < this.Text.Length)
                                 {
-                                    this.TextPtr.TextOffset++;
+                                    if (this.TextPtr.TextOffset < this.Text.Length)
+                                    {
+                                        this.TextPtr.TextOffset++;
+                                    }
+                                    continue;
                                 }
-                                continue;
 
                             case Keys.Right:
-                                if (this.TextPtr.TextOffset > 0)
                                 {
-                                    this.TextPtr.TextOffset--;
+                                    if (this.TextPtr.TextOffset > 0)
+                                    {
+                                        this.TextPtr.TextOffset--;
+                                    }
+                                    continue;
                                 }
-                                continue;
+
                             case Keys.Back:
                                 {
-                                    if (this.Text.Length > 0)
+                                    if ((this.Text.Length > 0) &&
+                                        (this.TextPtr.TextOffset != this.Text.Length))
                                     {
-                                        this.Text = this.Text.Remove(this.Text.Length - 1, 1);
-
-                                        if (this.Text == "\0")
-                                        {
-                                            this.Text = string.Empty;
-                                        }
+                                        this.Text = this.Text.Remove(this.Text.Length - 1 - (int)this.TextPtr.TextOffset, 1); // string is only type, that can converts to string quickly
                                     }
-                                    break;
+                                    continue;
                                 }
                         }
 
