@@ -62,11 +62,11 @@ namespace DioLive.Xna.Controls
 
         #region States
 
-        protected MouseState currentMouseState;
-        protected VisibleState currentVisibleState = VisibleState.Normal;
-        protected KeyboardState previousKeyboardState;
-        protected MouseState previousMouseState;
-        protected VisibleState previousVisibleState = VisibleState.Normal;
+        protected MouseState currentMouseState { get; set; }
+        protected VisibleState currentVisibleState { get; set; } = VisibleState.Normal;
+        protected KeyboardState previousKeyboardState { get; set; }
+        protected MouseState previousMouseState { get; set; }
+        protected VisibleState previousVisibleState { get; set; } = VisibleState.Normal;
 
         #endregion States
 

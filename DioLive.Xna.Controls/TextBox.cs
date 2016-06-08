@@ -36,10 +36,11 @@ namespace DioLive.Xna.Controls
             this.Text = text;
 
             this.TextPtr = new TextBoxPtr();
+            this.TextSize = Font.MeasureString(this.Text);
         }
 
         #endregion Constructors
-     
+
         #region Properties
 
         public SpriteFont Font { get; set; }
@@ -78,17 +79,7 @@ namespace DioLive.Xna.Controls
         /// <summary>
         /// This property autoupdates when this.Text is changing.
         /// </summary>
-        internal Vector2 TextSize
-        {
-            get
-            {
-                return Font.MeasureString(this.Text);
-            }
-            set
-            {
-                this.textSize = value;
-            }
-        }
+        internal Vector2 TextSize { get; set; }
 
         #endregion Properties
 
@@ -318,7 +309,7 @@ namespace DioLive.Xna.Controls
                             ///////////
                         };
 
-        private Vector2 textSize;
+        //private Vector2 textSize;
 
         #endregion allowedkeys
 
