@@ -17,14 +17,22 @@ namespace DioLive.Xna.Controls
 
     public class TextBox : UIElement, IHasFocus
     {
-        private string text;
+        #region Fields
 
-        public TextBox() 
+        private string text;
+        private Vector2 stringPosition;
+        private Vector2 textPtrPosition;
+
+        #endregion Fields
+
+        #region Constructors
+
+        public TextBox()
             : this(string.Empty)
         {
         }
 
-        public TextBox(string text) 
+        public TextBox(string text)
             : base()
         {
             // I don't want to bounding to source order in ctor
@@ -41,6 +49,51 @@ namespace DioLive.Xna.Controls
 
             this.TextPtr = new TextBoxPtr();
         }
+
+        #endregion Constructors
+
+        #region Events
+
+        public event EventHandler MouseClick;
+
+        public event EventHandler MouseDown;
+
+        public event EventHandler MouseOut;
+
+        public event EventHandler MouseUnclick;
+
+        public event EventHandler MouseUp;
+
+        protected virtual void OnMouseClick(EventArgs e)
+        {
+            this.MouseClick?.Invoke(this, e);
+        }
+
+        protected virtual void OnMouseDown(EventArgs e)
+        {
+            this.MouseDown?.Invoke(this, e);
+        }
+
+        protected virtual void OnMouseOut(EventArgs e)
+        {
+            this.MouseOut?.Invoke(this, e);
+        }
+
+        protected virtual void OnMouseUnclick(EventArgs e)
+        {
+            this.MouseUnclick?.Invoke(this, e);
+        }
+
+        protected virtual void OnMouseUp(EventArgs e)
+        {
+            this.MouseUp?.Invoke(this, e);
+        }
+
+        #endregion Events
+
+        #region Properties
+
+        public bool IsFocused { get; set; }
 
         public SpriteFont Font { get; set; }
 
@@ -95,6 +148,10 @@ namespace DioLive.Xna.Controls
             }
         }
 
+        #endregion Properties
+
+        #region Public methods
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             if (spriteBatch == null)
@@ -114,9 +171,9 @@ namespace DioLive.Xna.Controls
                 {
                     spriteBatch.Draw(Assets.TextPtr,
                                 new Rectangle((int)textPtrPosition.X,
-                                        (int)textPtrPosition.Y,
-                                        this.TextPtr.Width,
-                                        this.TextPtr.Height),
+                                                (int)textPtrPosition.Y,
+                                                this.TextPtr.Width,
+                                                this.TextPtr.Height),
                                 Color.White);
 
                     spriteBatch.DrawString(Font, this.Text, new Vector2(stringPosition.X, stringPosition.Y), Color.Black);
@@ -256,6 +313,8 @@ namespace DioLive.Xna.Controls
             }
         }
 
+        #endregion Public methods
+
         #region states
 
         protected MouseState currentMouseState;
@@ -266,8 +325,7 @@ namespace DioLive.Xna.Controls
 
         #endregion states
 
-        private Vector2 stringPosition;
-        private Vector2 textPtrPosition;
+        #region Private methods
 
         private void RecalcPadding()
         {
@@ -317,50 +375,7 @@ namespace DioLive.Xna.Controls
             }
         }
 
-        #region iHasFocus
-
-        public bool IsFocused { get; set; }
-
-        #region events
-
-        public event EventHandler MouseClick;
-
-        public event EventHandler MouseDown;
-
-        public event EventHandler MouseOut;
-
-        public event EventHandler MouseUnclick;
-
-        public event EventHandler MouseUp;
-
-        protected virtual void OnMouseClick(EventArgs e)
-        {
-            this.MouseClick?.Invoke(this, e);
-        }
-
-        protected virtual void OnMouseDown(EventArgs e)
-        {
-            this.MouseDown?.Invoke(this, e);
-        }
-
-        protected virtual void OnMouseOut(EventArgs e)
-        {
-            this.MouseOut?.Invoke(this, e);
-        }
-
-        protected virtual void OnMouseUnclick(EventArgs e)
-        {
-            this.MouseUnclick?.Invoke(this, e);
-        }
-
-        protected virtual void OnMouseUp(EventArgs e)
-        {
-            this.MouseUp?.Invoke(this, e);
-        }
-
-        #endregion events
-
-        #endregion iHasFocus
+        #endregion Private methods
 
         #region indiaismymother
 
