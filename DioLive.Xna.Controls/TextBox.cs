@@ -172,6 +172,18 @@ namespace DioLive.Xna.Controls
                                     continue;
                                 }
 
+                            case Keys.Home:
+                                {
+                                    this.TextPtr.TextOffset = (uint)this.Text.Length;
+                                    continue;
+                                }
+
+                            case Keys.End:
+                                {
+                                    this.TextPtr.TextOffset = 0;
+                                    continue;
+                                }
+
                             case Keys.Back:
                                 {
                                     if ((this.Text.Length > 0) &&
@@ -312,6 +324,8 @@ namespace DioLive.Xna.Controls
                             Keys.OemTilde,		    // `
                             Keys.Left,		        // left arrow
                             Keys.Right,		        // right arrow
+                            Keys.Home,              // home
+                            Keys.End,               // end
                             //////////////////////////
 
                             /////////// arabic numbers
