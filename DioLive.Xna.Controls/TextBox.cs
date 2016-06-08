@@ -63,7 +63,6 @@ namespace DioLive.Xna.Controls
             {
                 this.text = value;
 
-                // first init without bounding to source order in ctor
                 if (this.Font != null)
                 {
                     this.TextSize = Font.MeasureString(this.Text);
@@ -83,14 +82,7 @@ namespace DioLive.Xna.Controls
         {
             get
             {
-                // first init without bounding to source order in ctor
-                if ((this.Text.Length > 0) &&
-                    (this.textSize == default(Vector2)))
-                {
-                    this.TextSize = Font.MeasureString(this.Text);
-                }
-
-                return this.textSize;
+                return Font.MeasureString(this.Text);
             }
             set
             {
@@ -117,7 +109,8 @@ namespace DioLive.Xna.Controls
                 spriteBatch.Draw(Assets.Pixel, this.GetInnerBounds(), background.Color);
             }
 
-            // here I emulate css's attribute overflow:hidden: all text outside this text box will be cutted
+            // here I emulate css's attribute 'overflow:hidden'
+            // all text outside this text box will be cutted
             using (Scope.UseValue(() => spriteBatch.GraphicsDevice.RasterizerState, Assets.Scissors))
             {
                 using (Scope.UseValue(() => spriteBatch.GraphicsDevice.ScissorRectangle, Rectangle.Intersect(this.GetInnerBounds(), spriteBatch.GraphicsDevice.ScissorRectangle)))
@@ -143,14 +136,13 @@ namespace DioLive.Xna.Controls
         {
             base.Update(gameTime);
 
-            // this region has to move to update helper or smth, due to this will be common method for all IHasFocus, I think
-
             if (this.IsFocused)
             {
                 KeyboardState state = Keyboard.GetState();
 
-                foreach (Keys key in keys)
+                foreach (Keys key in allowedKeys)
                 {
+                    // TODO how to do KeyRelease in another way? Have to?..
                     if (state.IsKeyUp(key) &&
                         (this.previousKeyboardState.IsKeyDown(key)))
                     {
@@ -211,12 +203,12 @@ namespace DioLive.Xna.Controls
 
         #region Private methods
 
+        // TODO: split to three methods
         private void RecalcPadding()
         {
             Vector2 fontSize = Font.MeasureString(this.Text);
 
             // padding
-
             // TODO fix padding's magic numbers
             this.Padding = new Vector2
             {
@@ -255,7 +247,7 @@ namespace DioLive.Xna.Controls
                 this.textPtrPosition.X += this.Font
                             .MeasureString(this.Text
                                                 .Substring(0, this.Text.Length - (int)this.TextPtr.TextOffset))
-                            .X; // TODO to optimizate
+                            .X; // TODO optimizate
             }
         }
 
@@ -265,7 +257,7 @@ namespace DioLive.Xna.Controls
 
         #region allowedkeys
 
-        private readonly Keys[] keys = new Keys[]
+        private readonly Keys[] allowedKeys = new Keys[]
                         {
                             Keys.Q,
                             Keys.W,
