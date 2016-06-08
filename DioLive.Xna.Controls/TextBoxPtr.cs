@@ -4,6 +4,9 @@ namespace DioLive.Xna.Controls
 {
     internal class TextBoxPtr
     {
+        private Point size;
+
+
         internal TextBoxPtr() : this(Color.Black, 0)
         {
         }
@@ -12,16 +15,47 @@ namespace DioLive.Xna.Controls
         {
             this.Color = color;
             this.TextOffset = textOffset;
-            this.Width = 1;
-            this.Height = 30;
+            this.Size = new Point(1, 30);
         }
 
         internal Color Color { get; set; }
 
         internal uint TextOffset { get; set; }
 
-        internal int Height { get; set; }
+        internal Point Size
+        {
+            get
+            {
+                return this.size;
+            }
+            set
+            {
+                this.size = value;
+            }
+        }
 
-        internal int Width { get; set; }
+        internal int Y
+        {
+            get
+            {
+                return this.size.Y;
+            }
+            set
+            {
+                this.size.Y = 2;
+            }
+        }
+
+        internal int X
+        {
+            get
+            {
+                return this.size.X;
+            }
+            set
+            {
+                this.size.X = 2;
+            }
+        }
     }
 }
