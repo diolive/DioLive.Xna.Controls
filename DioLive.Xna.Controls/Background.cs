@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace DioLive.Xna.Controls
 {
@@ -19,6 +20,11 @@ namespace DioLive.Xna.Controls
 
         public void Draw(SpriteBatch spriteBatch, Rectangle bounds)
         {
+            if (spriteBatch == null)
+            {
+                throw new ArgumentNullException(nameof(spriteBatch));
+            }
+
             spriteBatch.Draw(Assets.Pixel, bounds, this.Color);
         }
     }

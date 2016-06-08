@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using DioLive.Helpers.Properties;
 using DioLive.Xna.Controls.Layouts;
+using System;
 
 namespace DioLive.Xna.Controls
 {
@@ -13,7 +14,7 @@ namespace DioLive.Xna.Controls
     {
         private static readonly LayoutBuilder DefaultLayout = SimpleLayout.GetBuilder();
 
-        private List<UIElement> elements;
+        private readonly List<UIElement> elements;
 
         public Container()
             : this(DefaultLayout)
@@ -38,11 +39,16 @@ namespace DioLive.Xna.Controls
 
         public void ApplyLayout(LayoutBuilder layoutBuilder)
         {
-            this.Layout = layoutBuilder(this);
+            this.Layout = layoutBuilder?.Invoke(this);
         }
 
         public void AddElement(UIElement element)
         {
+            if (element == null)
+            {
+                throw new ArgumentNullException(nameof(element));
+            }
+
             element.Parent = this;
             if (!this.elements.Contains(element))
             {
@@ -57,6 +63,11 @@ namespace DioLive.Xna.Controls
 
         public void RemoveElement(UIElement element)
         {
+            if (element == null)
+            {
+                throw new ArgumentNullException(nameof(element));
+            }
+
             if (this.elements.Contains(element))
             {
                 this.elements.Remove(element);
@@ -80,6 +91,11 @@ namespace DioLive.Xna.Controls
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            if (spriteBatch == null)
+            {
+                throw new ArgumentNullException(nameof(spriteBatch));
+            }
+
             base.Draw(spriteBatch);
 
             var gfx = spriteBatch.GraphicsDevice;

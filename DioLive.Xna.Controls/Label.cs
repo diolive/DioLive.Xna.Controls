@@ -109,6 +109,11 @@ namespace DioLive.Xna.Controls
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            if (spriteBatch == null)
+            {
+                throw new ArgumentNullException(nameof(spriteBatch));
+            }
+
             base.Draw(spriteBatch);
 
             // TODO: this call is redundant but required because of parent changes

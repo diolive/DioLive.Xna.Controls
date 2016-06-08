@@ -24,6 +24,11 @@ namespace DioLive.Helpers.Properties
 
         public static PropertyWrapper Wrap<T>(Expression<Func<T>> property)
         {
+            if (property == null)
+            {
+                throw new ArgumentNullException(nameof(property));
+            }
+
             MemberExpression memberExpr = property.Body as MemberExpression;
             if (memberExpr == null)
             {

@@ -27,7 +27,7 @@ namespace DioLive.Xna.Controls
             {
                 if (value < 0)
                 {
-                    throw new ArgumentException("Border width cannot be less than zero", nameof(Width));
+                    throw new ArgumentException("Border's width cannot be less than zero");
                 }
 
                 this.width = value;
@@ -36,6 +36,11 @@ namespace DioLive.Xna.Controls
 
         public void Draw(SpriteBatch spriteBatch, Rectangle bounds)
         {
+            if (spriteBatch == null)
+            {
+                throw new ArgumentNullException(nameof(spriteBatch));
+            }
+
             if (this.width == 0)
             {
                 return;

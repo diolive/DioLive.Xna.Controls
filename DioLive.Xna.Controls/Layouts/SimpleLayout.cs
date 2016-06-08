@@ -17,6 +17,11 @@ namespace DioLive.Xna.Controls.Layouts
 
         public Rectangle GetBounds(UIElement element)
         {
+            if (element == null)
+            {
+                throw new ArgumentNullException(nameof(element));
+            }
+
             if (!this.container.Elements.Contains(element))
             {
                 throw new ArgumentException("Element was not found in this layout");
