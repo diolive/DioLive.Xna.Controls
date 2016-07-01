@@ -76,15 +76,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <ProjectReference Include="..\DioLive.Xna.Interfaces\DioLive.Xna.Interfaces.csproj">
-      <Project>{EBFB878C-49D8-4D72-87D5-07EDCF42A2BA}</Project>
-      <Name>DioLive.Xna.Interfaces</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DioLive.Helpers.Properties\DioLive.Helpers.Properties.csproj">
       <Project>{b1168ad3-f2d4-4be4-b9e9-aeb3f938c739}</Project>
       <Name>DioLive.Helpers.Properties</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DioLive.Xna.Interfaces\DioLive.Xna.Interfaces.csproj">
+      <Project>{ebfb878c-49d8-4d72-87d5-07edcf42a2ba}</Project>
+      <Name>DioLive.Xna.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
