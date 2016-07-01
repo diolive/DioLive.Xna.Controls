@@ -25,7 +25,7 @@ namespace DioLive.Xna.Controls
         {
             this.elements = new List<UIElement>();
 
-            ApplyLayout(layoutBuilder);
+            this.ApplyLayout(layoutBuilder);
 
             this.LocationChanged += (s, e) => this.Layout.Invalidate();
             this.SizeChanged += (s, e) => this.Layout.Invalidate();
@@ -55,9 +55,9 @@ namespace DioLive.Xna.Controls
                 this.elements.Add(element);
                 this.Layout.Invalidate();
 
-                element.LocationChanged += Element_PropertyChanged;
-                element.SizeChanged += Element_PropertyChanged;
-                element.ZOrderChanged += Element_PropertyChanged;
+                element.LocationChanged += this.Element_PropertyChanged;
+                element.SizeChanged += this.Element_PropertyChanged;
+                element.ZOrderChanged += this.Element_PropertyChanged;
             }
         }
 
@@ -73,9 +73,9 @@ namespace DioLive.Xna.Controls
                 this.elements.Remove(element);
                 this.Layout.Invalidate();
 
-                element.LocationChanged -= Element_PropertyChanged;
-                element.SizeChanged -= Element_PropertyChanged;
-                element.ZOrderChanged -= Element_PropertyChanged;
+                element.LocationChanged -= this.Element_PropertyChanged;
+                element.SizeChanged -= this.Element_PropertyChanged;
+                element.ZOrderChanged -= this.Element_PropertyChanged;
             }
         }
 

@@ -84,12 +84,10 @@ namespace DioLive.Xna.Controls
             {
                 return texture;
             }
-            else
-            {
-                texture = Texture2DHelper.Generate(graphicsDevice, size.X, size.Y, color);
-                Assets.dict[size] = texture;
-                return texture;
-            }
+
+            texture = Texture2DHelper.Generate(graphicsDevice, size.X, size.Y, color);
+            Assets.dict[size] = texture;
+            return texture;
         }
     }
 }

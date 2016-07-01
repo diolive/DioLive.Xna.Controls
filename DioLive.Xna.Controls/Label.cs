@@ -64,11 +64,11 @@ namespace DioLive.Xna.Controls
             }
             set
             {
-                this.SetProperty(() => Text, value, () =>
+                this.SetProperty(() => this.Text, value, () =>
                 {
                     this.text = value;
                     this.MeasureText();
-                }, TextChanging, TextChanged);
+                }, this.TextChanging, this.TextChanged);
             }
         }
 
@@ -80,11 +80,11 @@ namespace DioLive.Xna.Controls
             }
             set
             {
-                this.SetProperty(() => Font, value, () =>
+                this.SetProperty(() => this.Font, value, () =>
                 {
                     this.font = value;
                     this.MeasureText();
-                }, FontChanging, FontChanged);
+                }, this.FontChanging, this.FontChanged);
             }
         }
 
@@ -96,10 +96,10 @@ namespace DioLive.Xna.Controls
             }
             set
             {
-                this.SetProperty(() => TextColor, value, () =>
+                this.SetProperty(() => this.TextColor, value, () =>
                 {
                     this.textColor = value;
-                }, TextColorChanging, TextColorChanged);
+                }, this.TextColorChanging, this.TextColorChanged);
             }
         }
 
@@ -133,14 +133,14 @@ namespace DioLive.Xna.Controls
             float margin = this.font.MeasureString(" ").X;
             Rectangle bounds = this.GetBounds();
 
-            if (textSize.X + margin * 2 > bounds.Width)
+            if (this.textSize.X + margin * 2 > bounds.Width)
             {
-                bounds.Width = (int)Math.Round(textSize.X + margin * 2);
+                bounds.Width = (int)Math.Round(this.textSize.X + margin * 2);
             }
 
-            if (textSize.Y + margin * 2 > bounds.Height)
+            if (this.textSize.Y + margin * 2 > bounds.Height)
             {
-                bounds.Height = (int)Math.Round(textSize.Y + margin * 2);
+                bounds.Height = (int)Math.Round(this.textSize.Y + margin * 2);
             }
 
             this.Size = bounds.Size.ToVector2();

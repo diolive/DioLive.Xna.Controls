@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Linq;
 
 namespace DioLive.Xna.Controls
 {
@@ -21,8 +22,7 @@ namespace DioLive.Xna.Controls
 
         #region Constructors
 
-        public TextBox()
-            : this(string.Empty)
+        public TextBox() : this(string.Empty)
         {
         }
 
@@ -36,7 +36,7 @@ namespace DioLive.Xna.Controls
             this.Font = DefaultFont;
             this.Text = text;
 
-            this.TextPtr = new TextBoxPtr(new Point(1, (int)Font.MeasureString("W").Y)); // 'W' is usual letter in font
+            this.TextPtr = new TextBoxPtr(new Point(1, (int) this.Font.MeasureString("W").Y)); // 'W' is usual letter in font
         }
 
         #endregion Constructors
@@ -58,7 +58,7 @@ namespace DioLive.Xna.Controls
 
                 if (this.text != null)
                 {
-                    this.TextSize = Font.MeasureString(this.Text);
+                    this.TextSize = this.Font.MeasureString(this.Text);
                 }
             }
         }
@@ -83,7 +83,7 @@ namespace DioLive.Xna.Controls
 
                 if (this.Font != null)
                 {
-                    this.TextSize = Font.MeasureString(this.Text);
+                    this.TextSize = this.Font.MeasureString(this.Text);
                 }
             }
         }
@@ -124,10 +124,10 @@ namespace DioLive.Xna.Controls
                 using (Scope.UseValue(() => spriteBatch.GraphicsDevice.ScissorRectangle, Rectangle.Intersect(this.GetInnerBounds(), spriteBatch.GraphicsDevice.ScissorRectangle)))
                 {
                     spriteBatch.Draw(Assets.GetTextPtrTexture(this.TextPtr.Size),
-                                        new Rectangle(textPtrPosition.ToPoint(), this.TextPtr.Size),
+                                        new Rectangle(this.textPtrPosition.ToPoint(), this.TextPtr.Size),
                                         Color.White);
 
-                    spriteBatch.DrawString(Font, this.Text, stringPosition, Color.Black);
+                    spriteBatch.DrawString(this.Font, this.Text, this.stringPosition, Color.Black);
                 }
             }
         }
@@ -141,86 +141,86 @@ namespace DioLive.Xna.Controls
         {
             base.Update(gameTime);
 
-            if (this.IsFocused)
+            if (!this.IsFocused)
             {
-                KeyboardState state = Keyboard.GetState();
+                return;
+            }
 
-                foreach (Keys key in TextBox.allowedKeys)
+            KeyboardState state = Keyboard.GetState();
+
+            foreach (Keys key in allowedKeys.Where(key => state.IsKeyUp(key) &&
+                                                          this.previousKeyboardState.IsKeyDown(key)))
+            {
+                // if you wanna add new case block here, ensure, that you added new key value to TextBox.allowedKeys array
+                // ReSharper disable once SwitchStatementMissingSomeCases
+                // due to other cases are in this.Map()
+                switch (key)
                 {
-                    // TODO how to do KeyRelease in another way? Have to?..
-                    if (state.IsKeyUp(key) &&
-                        (this.previousKeyboardState.IsKeyDown(key)))
+                    case Keys.Left:
                     {
-                        // if you wanna add new case block here, ensure, that you added new key value to TextBox.allowedKeys array
-                        switch (key)
+                        if (this.TextPtr.Offset < this.Text.Length)
                         {
-                            case Keys.Left:
-                                {
-                                    if (this.TextPtr.Offset < this.Text.Length)
-                                    {
-                                        this.TextPtr.Offset++;
-                                    }
-                                    continue;
-                                }
-
-                            case Keys.Right:
-                                {
-                                    if (this.TextPtr.Offset > 0)
-                                    {
-                                        this.TextPtr.Offset--;
-                                    }
-                                    continue;
-                                }
-
-                            case Keys.Home:
-                                {
-                                    this.TextPtr.Offset = (uint)this.Text.Length;
-                                    continue;
-                                }
-
-                            case Keys.End:
-                                {
-                                    this.TextPtr.Offset = 0;
-                                    continue;
-                                }
-
-                            case Keys.Back:
-                                {
-                                    if ((this.Text.Length > 0) &&
-                                        (this.TextPtr.Offset != this.Text.Length))
-                                    {
-                                        this.Text = this.Text.Remove(this.Text.Length - 1 - (int)this.TextPtr.Offset, 1); // string is only type, that can converts to string quickly
-                                    }
-                                    continue;
-                                }
+                            this.TextPtr.Offset++;
                         }
+                        continue;
+                    }
 
-                        // TODO bug: Caps + '1' == '!', but has to be '1'
-                        bool isUppercase = (state.IsKeyDown(Keys.LeftShift) ||
-                                            state.IsKeyDown(Keys.RightShift)) ^
-                                            System.Windows.Forms.Control.IsKeyLocked(System.Windows.Forms.Keys.CapsLock); // TODO to ask about ref
-
-                        if (this.TextPtr.Offset == 0)
+                    case Keys.Right:
+                    {
+                        if (this.TextPtr.Offset > 0)
                         {
-                            string output = this.Map(key, isUppercase);
+                            this.TextPtr.Offset--;
+                        }
+                        continue;
+                    }
 
-                            // if this keymap exists
-                            if (output != null)
-                            {
-                                this.Text += output; // string is only type, that can converts to string quickly
-                            }
-                        }
-                        else
+                    case Keys.Home:
+                    {
+                        this.TextPtr.Offset = (uint)this.Text.Length;
+                        continue;
+                    }
+
+                    case Keys.End:
+                    {
+                        this.TextPtr.Offset = 0;
+                        continue;
+                    }
+
+                    case Keys.Back:
+                    {
+                        if ((this.Text.Length > 0) &&
+                            (this.TextPtr.Offset != this.Text.Length))
                         {
-                            string newStr = this.Map(key, isUppercase);
-                            this.Text = this.Text.Insert(this.Text.Length - (int)this.TextPtr.Offset, newStr); // TODO bullshit, rewrite
+                            this.Text = this.Text.Remove(this.Text.Length - 1 - (int)this.TextPtr.Offset, 1); // string is only type, that can converts to string quickly
                         }
+                        continue;
                     }
                 }
 
-                this.previousKeyboardState = state;
-                RecalcAll();
+                // TODO bug: Caps + '1' == '!', but has to be '1'
+                bool isUppercase = (state.IsKeyDown(Keys.LeftShift) ||
+                                    state.IsKeyDown(Keys.RightShift)) ^
+                                   System.Windows.Forms.Control.IsKeyLocked(System.Windows.Forms.Keys.CapsLock); // TODO to ask about ref
+
+                if (this.TextPtr.Offset == 0)
+                {
+                    string output = this.Map(key, isUppercase);
+
+                    // if this keymap exists
+                    if (output != null)
+                    {
+                        this.Text += output; // string is only type, that can converts to string quickly
+                    }
+                }
+                else
+                {
+                    string newStr = this.Map(key, isUppercase);
+                    this.Text = this.Text.Insert(this.Text.Length - (int)this.TextPtr.Offset, newStr); // TODO bullshit, rewrite
+                }
             }
+
+            this.previousKeyboardState = state;
+            this.RecalcAll();
         }
 
         #endregion Public methods
@@ -230,14 +230,14 @@ namespace DioLive.Xna.Controls
         private void RecalcAll()
         {
             // exact in this order
-            RecalcPadding();
-            RecalcStringPosition();
-            RecalcTextPointerPosition();
+            this.RecalcPadding();
+            this.RecalcStringPosition();
+            this.RecalcTextPointerPosition();
         }
 
         private void RecalcTextPointerPosition()
         {
-            this.textPtrPosition = stringPosition;
+            this.textPtrPosition = this.stringPosition;
 
             if (this.TextPtr.Offset == 0)
             {
@@ -259,16 +259,18 @@ namespace DioLive.Xna.Controls
             this.stringPosition.X += this.Padding.X;
             this.stringPosition.Y += this.Padding.Y;
 
-            if (this.TextSize.X > this.Size.X)
+            if (this.TextSize.X <= this.Size.X)
             {
-                this.stringPosition.X -= (this.TextSize.X - this.Size.X);
-                this.stringPosition.X -= this.Padding.X + 5;
+                return;
             }
+
+            this.stringPosition.X -= (this.TextSize.X - this.Size.X);
+            this.stringPosition.X -= this.Padding.X + 5;
         }
 
         private void RecalcPadding()
         {
-            Vector2 fontSize = Font.MeasureString(this.Text);
+            Vector2 fontSize = this.Font.MeasureString(this.Text);
 
             // TODO fix padding's magic numbers
             this.Padding = new Vector2
