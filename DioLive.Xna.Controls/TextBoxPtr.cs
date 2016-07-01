@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace DioLive.Xna.Controls
 {
@@ -23,7 +22,6 @@ namespace DioLive.Xna.Controls
         internal uint Offset { get; set; }
 
         // this suppressed due to X and Y props
-#pragma warning disable CC0017 // Use auto property
         internal Point Size
         {
             get
@@ -35,7 +33,6 @@ namespace DioLive.Xna.Controls
                 this.size = value;
             }
         }
-#pragma warning restore CC0017 // Use auto property
 
         internal int Y
         {
@@ -45,7 +42,7 @@ namespace DioLive.Xna.Controls
             }
             set
             {
-                this.size.Y = 2;
+                this.size.Y = value;
             }
         }
 
@@ -57,7 +54,7 @@ namespace DioLive.Xna.Controls
             }
             set
             {
-                this.size.X = 2;
+                this.size.X = value;
             }
         }
     }
